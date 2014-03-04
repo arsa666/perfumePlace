@@ -6,7 +6,7 @@
   {
     
     // Create connection
-    $con=mysqli_connect("localhost",user,password,database);
+    $con=mysqli_connect("localhost","root","666arsa666","arsa666_perfumePlace");
 
     // Check connection
     if(mysqli_connect_errno())
@@ -127,12 +127,13 @@ function insertMercanciaBodega($con, $id, $name, $cantidad){
     return $checkInsertion;
 }
 
-function ventaRegistrar($con, $coid, $nombre ,$precioVenta, $cantidad, $tipoVenta, $total, $nombreCliente, $numeroCliente){
+function ventaRegistrar($con, $coid, $nombre ,$precioVenta, $cantidad, $tipoVenta, $total, $nombreCliente, $numeroCliente, $formaPago, $otroAlmacen){
   
   $precioVenta = (double)$precioVenta;
   $cantidad = (int)$cantidad;
   $total = (double)$total;
   $numeroCliente = (int)$numeroCliente;
+
 
   if(is_numeric($coid) == false){
       return 0;
@@ -141,8 +142,8 @@ function ventaRegistrar($con, $coid, $nombre ,$precioVenta, $cantidad, $tipoVent
     $cantidadAfuera =  getTotalAvailable($con, "MercanciaAfuera", $coid);
     $total = $cantidadAfuera - $cantidad;
     if($total >= 0 && $cantidadAfuera !== 0){
-        if($stmt = $con->prepare ("INSERT INTO VentasDiarias (coid, nombre, precioVenta, cantidad, tipoVenta, total, nombreCliente, numeroCliente) values (?,?,?,?,?,?,?,?)")){
-              if (!$stmt->bind_param("ssdisdsi", $coid, $nombre, $precioVenta, $cantidad, $tipoVenta, $total, $nombreCliente, $numeroCliente)){
+        if($stmt = $con->prepare ("INSERT INTO VentasDiarias (coid, nombre, precioVenta, cantidad, tipoVenta, total, nombreCliente, numeroCliente, formaPago, otroAlmacen) values (?,?,?,?,?,?,?,?,?,?)")){
+              if (!$stmt->bind_param("ssdisdsiss", $coid, $nombre, $precioVenta, $cantidad, $tipoVenta, $total, $nombreCliente, $numeroCliente, $formaPago, $otroAlmacen)){
                  echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;    
                  $response = "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error; 
                  return $resonse; 
@@ -154,7 +155,7 @@ function ventaRegistrar($con, $coid, $nombre ,$precioVenta, $cantidad, $tipoVent
                 }              
             $stmt->close();
             //venta registered correctly so now substract from sala de venta.  
-            $insertedCorrectly =  minusInventory($con, "MercanciaAfuera", $coid, $cantidad);
+            $insertedCorrectly =  minusInventory($con, "MercanciaAfuera", $coid, $cantidad);    
 
             return $insertedCorrectly;
             

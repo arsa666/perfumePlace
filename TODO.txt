@@ -3,4 +3,11 @@
 3) Create interface to pass mercancia from bodega to sala de venta.
 4) When selling a perfume make sure it exist on sala de venta and then substract. 
 5) Create git repository to sincronize everything.. make sure it is private. 
-6)
+
+
+
+
+*) una forma para mandar perfume a saleem bhai y que te lo pagen el mismo dia. 
+*) una forma para mandar perfume a saleem bhai y que te lo paga devuelta con mercancia otro dia. 
+*) una forma para pedir perfume a saleem bhai y pagarlo el mismo dia.
+*) una forma para pedir perfume a saleem bhai y pagarselo mandandole otra pieza otro dia. 

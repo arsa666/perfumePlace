@@ -3,26 +3,37 @@ var ventasView = Backbone.View.extend({
 	    'keyup #ventasCod': 'loadName',
 	    'keyup #ventasPrecio': 'loadTotal',
 	    'keyup #ventasCantidad': 'loadTotal',
-	    'click input:radio[name=ventaCategory]:checked': 'toggleCredit',
+	    'click input:radio[name=ventaPago]:checked': 'toggleOptions',
+	    'click input:radio[name=ventaCategory]:checked': 'loadTotal',
 	    'click input:submit': 'submitForm'
 	},
 	submitForm: function () {
 		var el = this.$el;
 
 		var cod = el.find("#ventasCod").val();
-		var nombre = el.find("#ventasNombre").val();
+		var nombre = el.find("#ventasNombre").text();
 		var precio = el.find("#ventasPrecio").val();
 		var cantidad = el.find("#ventasCantidad").val();
 		var categoria = el.find("[name=ventaCategory]:checked").val();
+		var ventaPago = el.find("[name=ventaPago]:checked").val();
+		var otroAlmacen = el.find("input[name='nombreAlmacen']").val();
 		var ventasCliente = '';
 		var numeroCliente = '';
 
-		if(categoria === "C"){
+		if(ventaPago === "Credito"){
 			ventasCliente = el.find("#ventasCliente").val();
 			numeroCliente = el.find("#numeroCliente").val();
 
 			if(ventasCliente === "" || numeroCliente === ""){
 				alert('No puede dejar el nombre del cliente o el numero del cliente en venta de Credito');
+				return;
+			}
+		}
+		if(ventaPago === "OtroAlmacen"){
+			 nombreAlmacen = el.find("input[name='nombreAlmacen']").val();
+
+			if(nombreAlmacen === ""){
+				alert('No puede dejar el nombre del almacen al que le transfirio el perfume en blanco, ingrese un nombre');
 				return;
 			}
 		}
@@ -35,13 +46,13 @@ var ventasView = Backbone.View.extend({
 			return;
 		}
 
-		var ventas = new ventasModel({coid:cod, nombre:nombre, precioVenta:precio, cantidad:cantidad, tipoVenta:categoria, nombreCliente: ventasCliente, numeroCliente: numeroCliente, total:total });
+		var ventas = new ventasModel({coid:cod, nombre:nombre, precioVenta:precio, cantidad:cantidad, tipoVenta:categoria, nombreCliente: ventasCliente, numeroCliente: numeroCliente, total:total, formaPago: ventaPago, otroAlmacen: otroAlmacen });
 
 		ventas.save({}, {
 			success: function (model, response) {            
 	            if(response === 0){
 	            	alert('Venta Registrada Correctamente');
-	            	var ultima = "Cod:"+model.coid+" <BR/> Nombre:"+model.nombre+" <BR/> Precio: "+model.precioVenta+"<BR/>Cantidad:"+model.cantidad+" <BR/>Tipo Venta: "+model.tipoVenta+"<BR/>Nombre Cliente:"+model.nombreCliente+" <BR/> Numero Cliente: "+model.numeroCliente+"<BR/> Total:"+model.total+" ";
+	            	var ultima = "Cod:"+model.coid+" <BR/> Nombre:"+model.nombre+" <BR/> Precio: "+model.precioVenta+"<BR/>Cantidad:"+model.cantidad+" <BR/>Tipo Venta: "+model.tipoVenta+"<BR/>Nombre Cliente:"+model.nombreCliente+" <BR/> Numero Cliente: "+model.numeroCliente+"<BR/> Total:"+model.total+"<BR/> Forma de Pago: "+model.formaPago + "<BR/>Nombre del almacen: "+model.otroAlmacen;
 	                el.find("#ultimaVenta").html(ultima);
 	            }else{
 	            	alert('Solo quedan: ' +response+ ' piezas en la sala de venta con codigo de barra: ' +model.coid);
@@ -52,17 +63,22 @@ var ventasView = Backbone.View.extend({
 	        }
 	    });
 	},
-	toggleCredit: function () {
+	toggleOptions: function () {
 
 		var el  = this.$el;
-		var val = el.find("[name=ventaCategory]:checked").val();
-		if(val === "C"){
+		var val = el.find("[name=ventaPago]:checked").val();
+		if(val === "Credito"){
 			el.find("#credito").show();
+			el.find("#nombreAlmacen").hide();
+
+		}else if(val === "OtroAlmacen"){
+			el.find("#credito").hide();
+			el.find(":radio[value='B']").click();
+			el.find("#nombreAlmacen").show();
 		}else{
 			el.find("#credito").hide();
+			el.find("#nombreAlmacen").hide();
 		}
-		this.loadTotal();
-
 	},
 	loadTotal: function () {
 		el = this.$el;
@@ -87,12 +103,12 @@ var ventasView = Backbone.View.extend({
 	    if(id !== ""){
 		model = this.collection.get({"id":String(id)});
 		if (model !== undefined){
-		    el.find("#ventasNombre").val(model.get("name"));
+		    el.find("#ventasNombre").text(model.get("name"));
 		}else{
-		    el.find("#ventasNombre").val("Este codigo no existe");
+		    el.find("#ventasNombre").text("Este codigo no existe");
 		}
 	    }else{
-                el.find("#ventasNombre").val("");
+                el.find("#ventasNombre").text("");
 	    }
 	},
        	load: function(){

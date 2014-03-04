@@ -10,11 +10,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
 	$nombreCliente = $data->{'nombreCliente'};
 	$numeroCliente = $data->{'numeroCliente'};
 	$total = $data->{'total'};
+	$formaPago = $data->{'formaPago'};
+	$otroAlmacen = $data->{'otroAlmacen'};
+
 
 	//sanitation checks
  	$db = openDB();
 
- 	$results = ventaRegistrar($db, $coid, $nombre ,$precioVenta, $cantidad, $tipoVenta, $total, $nombreCliente, $numeroCliente);
+ 	$results = ventaRegistrar($db, $coid, $nombre ,$precioVenta, $cantidad, $tipoVenta, $total, $nombreCliente, $numeroCliente, $formaPago, $otroAlmacen);
  	
  	closeDB($db);
 

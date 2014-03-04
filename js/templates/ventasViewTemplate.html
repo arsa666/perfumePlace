@@ -5,8 +5,7 @@
 Codigo del Producto:<BR/>
 <input type="text" id="ventasCod" /><BR/>
 
-Nombre del Producto:<BR/>
-<input type="text" id="ventasNombre" /><BR/>
+Nombre del Producto:<div id="ventasNombre"></div><BR/>
 
 Precio de Venta:<BR/>
 <input type="text" id="ventasPrecio" /><BR/>
@@ -14,24 +13,35 @@ Precio de Venta:<BR/>
 Cantidad:<BR/>
 <input type="text" id="ventasCantidad" value="1" /><BR/>
 <BR/>
-Tipo de venta:<BR/><BR/>
+Tipo de venta:<Br/>
 Tipo A: <input type = "radio" name ="ventaCategory" value = "A" checked = "checked" />
 Tipo B: <input type = "radio" name ="ventaCategory" value = "B"  />
-CREDITO: <input type = "radio" name ="ventaCategory" value = "C"  /><BR><BR/>
+<Br/><Br/>
+
+<div id="#formaPago">
+	Forma de Pago:<BR/>
+	 <input type = "radio" name ="ventaPago" value="Tarjeta"/> Tarjeta (Visa, Master Card, Clave)<BR/>
+	<input type = "radio" name ="ventaPago" value="Efectivo" checked="checked"/> Efectivo<BR/> 
+	<input type = "radio" name ="ventaPago" value = "Credito"  /> CREDITO<BR/>
+	<input type = "radio" name ="ventaPago" value = "OtroAlmacen"  /> Otro Almacen
+
+</div><Br/>
+
+<div id="nombreAlmacen" style="display:none">
+Nombre del Almacen:<Br/>
+	<input type="text" name="nombreAlmacen" placeholder="nombre del almacen al que se le dio perfume o sabana" />
+</div>
+<BR/><BR/>
 
 <div id="credito" style="display:none">
 
-NOMBRE del Cliente:<BR/>
-<input type="text" id="ventasCliente" placeholder="nombre del cliente" /><BR/>
-<BR/>
-
-Telefono del Cliente:<BR/>
-<input type="text" id="numeroCliente" placeholder="numero del cliente" /><BR/>
-<BR/>
-
+	NOMBRE del Cliente:<BR/>
+	<input type="text" id="ventasCliente" placeholder="nombre del cliente" /><BR/>
+	<BR/>
+	Telefono del Cliente:<BR/>
+	<input type="text" id="numeroCliente" placeholder="numero del cliente" /><BR/>
+	<BR/>
 </div>
-
-
 
 
 Total:<BR/>
