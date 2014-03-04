@@ -6,7 +6,7 @@
   {
     
     // Create connection
-    $con=mysqli_connect("localhost","root","666arsa666","arsa666_perfumePlace");
+    $con=mysqli_connect("localhost","user","passs","database");
 
     // Check connection
     if(mysqli_connect_errno())
