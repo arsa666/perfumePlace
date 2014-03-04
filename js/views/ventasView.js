@@ -1,0 +1,128 @@
+var ventasView = Backbone.View.extend({
+	events:{
+	    'keyup #ventasCod': 'loadName',
+	    'keyup #ventasPrecio': 'loadTotal',
+	    'keyup #ventasCantidad': 'loadTotal',
+	    'click input:radio[name=ventaCategory]:checked': 'toggleCredit',
+	    'click input:submit': 'submitForm'
+	},
+	submitForm: function () {
+		var el = this.$el;
+
+		var cod = el.find("#ventasCod").val();
+		var nombre = el.find("#ventasNombre").val();
+		var precio = el.find("#ventasPrecio").val();
+		var cantidad = el.find("#ventasCantidad").val();
+		var categoria = el.find("[name=ventaCategory]:checked").val();
+		var ventasCliente = '';
+		var numeroCliente = '';
+
+		if(categoria === "C"){
+			ventasCliente = el.find("#ventasCliente").val();
+			numeroCliente = el.find("#numeroCliente").val();
+
+			if(ventasCliente === "" || numeroCliente === ""){
+				alert('No puede dejar el nombre del cliente o el numero del cliente en venta de Credito');
+				return;
+			}
+		}
+
+		var total = el.find("#ventasTotal").val();
+
+		if(cod === "" || nombre ==="" || precio === "" || cantidad === "" || categoria === ""
+		 || total === ""){
+			alert('No puede dejar espacios en blanco');
+			return;
+		}
+
+		var ventas = new ventasModel({coid:cod, nombre:nombre, precioVenta:precio, cantidad:cantidad, tipoVenta:categoria, nombreCliente: ventasCliente, numeroCliente: numeroCliente, total:total });
+
+		ventas.save({}, {
+			success: function (model, response) {            
+	            if(response === 0){
+	            	alert('Venta Registrada Correctamente');
+	            	var ultima = "Cod:"+model.coid+" <BR/> Nombre:"+model.nombre+" <BR/> Precio: "+model.precioVenta+"<BR/>Cantidad:"+model.cantidad+" <BR/>Tipo Venta: "+model.tipoVenta+"<BR/>Nombre Cliente:"+model.nombreCliente+" <BR/> Numero Cliente: "+model.numeroCliente+"<BR/> Total:"+model.total+" ";
+	                el.find("#ultimaVenta").html(ultima);
+	            }else{
+	            	alert('Solo quedan: ' +response+ ' piezas en la sala de venta con codigo de barra: ' +model.coid);
+	            }
+        	},
+	        error: function (model, response) {
+	            alert('Error al insertar venta, contacte administrador: '+response.responseText+ " con codigo de barra: " +model.coid);
+	        }
+	    });
+	},
+	toggleCredit: function () {
+
+		var el  = this.$el;
+		var val = el.find("[name=ventaCategory]:checked").val();
+		if(val === "C"){
+			el.find("#credito").show();
+		}else{
+			el.find("#credito").hide();
+		}
+		this.loadTotal();
+
+	},
+	loadTotal: function () {
+		el = this.$el;
+		var precio = el.find("#ventasPrecio").val();
+		var cantidad = el.find("#ventasCantidad").val();
+		var tipoVenta = el.find('input:radio[name=ventaCategory]:checked').val();
+		var ventasTotal = el.find('#ventasTotal');
+
+		var total = precio * cantidad;
+		if(tipoVenta === "A"){
+			total = (total * 0.07) + total;
+		}
+
+		ventasTotal.val(total);
+	},
+	loadName: function (){
+	    self = this;
+	    el = this.$el;
+
+	    id = el.find("#ventasCod").val();
+
+	    if(id !== ""){
+		model = this.collection.get({"id":String(id)});
+		if (model !== undefined){
+		    el.find("#ventasNombre").val(model.get("name"));
+		}else{
+		    el.find("#ventasNombre").val("Este codigo no existe");
+		}
+	    }else{
+                el.find("#ventasNombre").val("");
+	    }
+	},
+       	load: function(){
+	    self = this;
+	    this.collection.fetch({
+                    success: (function (collection, data) {
+			    C('llego collection de productos');
+			}),
+			error:(function (e) {
+				C(' Service request failure: ' + e);
+			    }),
+			complete:(function (e) {
+				//  C(' Service request completed ');
+
+			    })
+			});
+	},
+    render:function() {
+	    self = this;
+		self.load();
+		var d = new Date();
+		var month = d.getMonth() + 1;
+		var day = d.getDate();
+		var year = d.getFullYear();
+	
+    	 $.get('js/templates/ventasViewTemplate.html', function (data) {
+		 template = _.template($(data).html(), {month:month, day:day, year:year});
+            self.$el.html(template);
+        }, 'html');
+
+        return this;
+    }
+});

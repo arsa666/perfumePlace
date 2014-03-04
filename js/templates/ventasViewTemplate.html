@@ -1,0 +1,48 @@
+<script type='text/template'>
+
+<div> Venta  del dia <%= day+"/"+month+"/"+year %> </div><BR/>
+
+Codigo del Producto:<BR/>
+<input type="text" id="ventasCod" /><BR/>
+
+Nombre del Producto:<BR/>
+<input type="text" id="ventasNombre" /><BR/>
+
+Precio de Venta:<BR/>
+<input type="text" id="ventasPrecio" /><BR/>
+
+Cantidad:<BR/>
+<input type="text" id="ventasCantidad" value="1" /><BR/>
+<BR/>
+Tipo de venta:<BR/><BR/>
+Tipo A: <input type = "radio" name ="ventaCategory" value = "A" checked = "checked" />
+Tipo B: <input type = "radio" name ="ventaCategory" value = "B"  />
+CREDITO: <input type = "radio" name ="ventaCategory" value = "C"  /><BR><BR/>
+
+<div id="credito" style="display:none">
+
+NOMBRE del Cliente:<BR/>
+<input type="text" id="ventasCliente" placeholder="nombre del cliente" /><BR/>
+<BR/>
+
+Telefono del Cliente:<BR/>
+<input type="text" id="numeroCliente" placeholder="numero del cliente" /><BR/>
+<BR/>
+
+</div>
+
+
+
+
+Total:<BR/>
+<input type="text" id="ventasTotal" /><BR/>
+
+
+<input type="submit" value="Marcar Venta">
+<BR/><Br/>Ultima venta: <Br/>
+<div id="ultimaVenta"></div>
+
+
+
+
+</script>
