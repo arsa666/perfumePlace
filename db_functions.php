@@ -144,7 +144,7 @@ function ventaRegistrar($con, $coid, $nombre ,$precioVenta, $cantidad, $tipoVent
     if($total >= 0 && $cantidadAfuera !== 0){
         if($stmt = $con->prepare ("INSERT INTO VentasDiarias (coid, nombre, precioVenta, cantidad, tipoVenta, total, nombreCliente, numeroCliente, formaPago, otroAlmacen) values (?,?,?,?,?,?,?,?,?,?)")){
               if (!$stmt->bind_param("ssdisdsiss", $coid, $nombre, $precioVenta, $cantidad, $tipoVenta, $total, $nombreCliente, $numeroCliente, $formaPago, $otroAlmacen)){
-                 echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;    
+                 echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
                  $response = "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error; 
                  return $resonse; 
               }
@@ -155,7 +155,7 @@ function ventaRegistrar($con, $coid, $nombre ,$precioVenta, $cantidad, $tipoVent
                 }              
             $stmt->close();
             //venta registered correctly so now substract from sala de venta.  
-            $insertedCorrectly =  minusInventory($con, "MercanciaAfuera", $coid, $cantidad);    
+            $insertedCorrectly =  minusInventory($con, "MercanciaAfuera", $coid, $cantidad);
 
             return $insertedCorrectly;
             

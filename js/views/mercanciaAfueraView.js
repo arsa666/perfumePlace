@@ -3,6 +3,7 @@ var mercanciaAfueraView = Backbone.View.extend({
         'click input:submit': 'insertMercanciaAfuera',        
         'keyup #coid-afuera': 'displayProductoName', 	
 	},
+    className: "content",
     insertMercanciaAfuera: function () {
     var self = this;
     var el = this.$el;

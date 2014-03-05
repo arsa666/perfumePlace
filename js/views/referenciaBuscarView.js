@@ -2,6 +2,7 @@ var referenciaBuscarView = Backbone.View.extend({
 	events: {
 		"keyup #productoReferencia": "displayProductoDetails"
 	},
+    className: "content",
 	displayProductoDetails: function(event){
 
 		el = this.$el;

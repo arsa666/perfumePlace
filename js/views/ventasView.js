@@ -7,6 +7,7 @@ var ventasView = Backbone.View.extend({
 	    'click input:radio[name=ventaCategory]:checked': 'loadTotal',
 	    'click input:submit': 'submitForm'
 	},
+	className: "content",
 	submitForm: function () {
 		var el = this.$el;
 

@@ -1,3 +1,26 @@
+.header{
+
+	border-bottom:solid black;
+	background-color: #CCCCCC;
+	position:fixed;
+	top:0px;
+	margin-top:0px;
+	margin-left:0px;
+	left:0px;
+	width:100%;
+	margin-bottom:100px;
+	height:80px;
+}
+
+.content{
+	margin-top:100px;
+}
+
+.header-bottons{
+	text-align:center;
+	padding:10px;
+}
+
 .fl{
 	float:left;
 
@@ -9,4 +32,56 @@
 
 .d-none{
 display:none;
+}
+
+
+.bot {
+    -moz-box-shadow:inset -3px -3px 0px 0px #d9fbbe;
+    -webkit-box-shadow:inset -3px -3px 0px 0px #d9fbbe;
+    box-shadow:inset -3px -3px 0px 0px #d9fbbe;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #b8e356), color-stop(1, #a5cc52) );
+    background:-moz-linear-gradient( center top, #b8e356 5%, #a5cc52 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#b8e356', endColorstr='#a5cc52');
+    background-color:#b8e356;
+    -webkit-border-top-left-radius:20px;
+    -moz-border-radius-topleft:20px;
+    border-top-left-radius:20px;
+    -webkit-border-top-right-radius:20px;
+    -moz-border-radius-topright:20px;
+    border-top-right-radius:20px;
+    -webkit-border-bottom-right-radius:20px;
+    -moz-border-radius-bottomright:20px;
+    border-bottom-right-radius:20px;
+    -webkit-border-bottom-left-radius:20px;
+    -moz-border-radius-bottomleft:20px;
+    border-bottom-left-radius:20px;
+    text-indent:0;
+    border:2px solid #83c41a;
+    display:inline-block;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:12px;
+    font-weight:bold;
+    font-style:normal;
+    height:40px;
+    line-height:40px;
+    text-decoration:none;
+    text-align:center;
+    text-shadow:1px 0px 0px #86ae47;
+    padding:7px;
+}
+
+.bot a{
+	text-decoration: none;
+	color:white;
+}
+
+.bot:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #a5cc52), color-stop(1, #b8e356) );
+    background:-moz-linear-gradient( center top, #a5cc52 5%, #b8e356 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#a5cc52', endColorstr='#b8e356');
+    background-color:#a5cc52;
+}.bot:active {
+    position:relative;
+    top:1px;
 }

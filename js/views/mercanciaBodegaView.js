@@ -3,6 +3,7 @@ var mercanciaBodegaView = Backbone.View.extend({
 	    'click input:submit': 'insertMercanciaBodega',
 	    'keyup #coid-bodega': 'displayProductoName',	 	   	
 	},
+	className: "content",
 	displayProductoName: function () {
 		el = this.$el;
 		id = el.find("#coid-bodega").val();

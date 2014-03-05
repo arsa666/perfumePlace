@@ -3,6 +3,7 @@ var modificarProductoView = Backbone.View.extend({
 	    'keyup #modificarId': 'mostrarDetallesProducto',
 	    'click #informacionProducto :submit': 'submitForm'
 	},
+	className: "content",
 	submitForm: function () {
 	    self  = this;
 	    el = this.$el;

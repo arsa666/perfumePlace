@@ -1,10 +1,5 @@
 var menuView = Backbone.View.extend({
-	events:{
-	'click .killview': 'closeParent'
-	},
-	closeParent: function(){
-		CloseParent(this);	   
-	},
+    className: "header", 
     render:function (eventName) {
     	self = this;
     	 $.get('js/templates/menuTemplate.html', function (data) {
