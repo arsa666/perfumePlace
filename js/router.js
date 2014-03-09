@@ -1,28 +1,41 @@
-window.App = {
+window.onload = function () {
+    Backbone.history.navigate("", {trigger:true});
+}; 
 
-};
+window.App = {};
 
 var MessageRouter = Backbone.Router.extend({
     initialize:function(){
         App.productos = new productoCollection();
         App.productos.fetch();
-        App.views = new Array();
+        //App.views = new Array();
         App.currentView;
-        $('#main').empty();   
-        var menu = new menuView({});
-        $('#main').html(menu.render().el);     
+        $('#main').empty();        
     },
     routes:{
+        ""      : "menuDisplay",
+        "clienteCredito" : "clienteCredito",
         "ventas": "displayVentas",
         "compras": "displayCompras",
         "mercanciaAfuera": "mercanciaAfuera",
-	    "mercanciaBodega": "mercanciaBodega",
+	"mercanciaBodega": "mercanciaBodega",
         "referencias": "displayReferencias",
         "depositos": "displayDepositos",
         "abonos": "displayAbonos",
         "gastos": "displayGastos",
         "agregar": "displayAgregarProductoNuevo",
-	    "modificar": "displayModificarProducto"
+	"modificar": "displayModificarProducto"
+    },
+    clienteCredito: function () {
+        closeView(App.currentView);
+        var clienteCredito = new clienteCreditoView({});
+        App.currentView = clienteCredito;
+        $('#main').append(clienteCredito.render().el);
+    },
+    menuDisplay: function () {
+        var menu = new menuView({});
+        $('#main').html(menu.render().el);
+        C('inside the menuDisplay');
     },
     mercanciaBodega: function () {	
         closeView(App.currentView);
@@ -40,9 +53,9 @@ var MessageRouter = Backbone.Router.extend({
     displayModificarProducto: function () {
         closeView(App.currentView);
 
-	    var modificar = new modificarProductoView({collection: App.productos});
+	var modificar = new modificarProductoView({collection: App.productos});
         App.currentView = modificar;    
-	    $('#main').append(modificar.render().el);
+	$('#main').append(modificar.render().el);
     },
     displayVentas: function(){	        
         closeView(App.currentView);

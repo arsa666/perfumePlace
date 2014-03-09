@@ -1,13 +1,9 @@
-1) Create the bodega table, id and quantity.
-2) Create bodega interface to insert mercancia into bodega.
-3) Create interface to pass mercancia from bodega to sala de venta.
-4) When selling a perfume make sure it exist on sala de venta and then substract. 
-5) Create git repository to sincronize everything.. make sure it is private. 
+* gastos table 
+  *make a way to insert gastos. 
+  * 
 
-
-
-
-*) una forma para mandar perfume a saleem bhai y que te lo pagen el mismo dia. 
-*) una forma para mandar perfume a saleem bhai y que te lo paga devuelta con mercancia otro dia. 
-*) una forma para pedir perfume a saleem bhai y pagarlo el mismo dia.
-*) una forma para pedir perfume a saleem bhai y pagarselo mandandole otra pieza otro dia. 
+1) make sure cliente credito is registered before doing a sell.
+2) make a file of the username and password of the db.
+3) extract all funcionality to each individual api file instead of using a db_functions file.
+4) validations and security de todo tipo.
+5) make the application look nice. 

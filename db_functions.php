@@ -6,7 +6,7 @@
   {
     
     // Create connection
-    $con=mysqli_connect("localhost","user","passs","database");
+    $con=mysqli_connect("localhost","root","666arsa666","arsa666_perfumePlace");
 
     // Check connection
     if(mysqli_connect_errno())
@@ -208,6 +208,26 @@ function getProductoCollection($con)
         
         return json_encode($json);
       }
+  }
+
+  function insertarClienteCredito($con, $cedula, $name, $celular){
+      if($stmt = $con->prepare ("INSERT INTO ClienteCredito (cedula, nombre, celular) values (?,?,?)")){
+                    if (!$stmt->bind_param("sss", $cedula,$name, $celular)){
+                        $response = mysqli_stmt_errno($stmt);
+                         return $response;
+                    }
+                    
+                    if (!$stmt->execute()) {
+                      $response = mysqli_stmt_errno($stmt);
+                      return $response;   
+                    }
+                    $stmt->close(); 
+                    $response = 0;                   
+                    return $response;
+        }else{
+            $response = mysqli_stmt_errno($stmt);
+            return $response;
+        }
   }
 
   function updateOrCreateProducto($con, $id, $name)
