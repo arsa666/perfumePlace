@@ -1,11 +1,14 @@
 <script type='text/template'>
+<div class="form">
+<h1>CAJA DIA <%= day+"/"+month+"/"+year %></h1>
 
-<div> Venta  del dia <%= day+"/"+month+"/"+year %> </div><BR/>
-
-Codigo del Producto:<BR/>
+<div>
+Codigo del Producto<BR/>
 <input type="text" id="ventasCod" /><BR/>
 
 Nombre del Producto:<div id="ventasNombre"></div><BR/>
+</div>
+
 
 Precio de Venta:<BR/>
 <input type="text" id="ventasPrecio" /><BR/>
@@ -23,7 +26,7 @@ Tipo B: <input type = "radio" name ="ventaCategory" value = "B"  />
 	 <input type = "radio" name ="ventaPago" value="Tarjeta"/> Tarjeta (Visa, Master Card, Clave)<BR/>
 	<input type = "radio" name ="ventaPago" value="Efectivo" checked="checked"/> Efectivo<BR/> 
 	<input type = "radio" name ="ventaPago" value = "Credito"  /> CREDITO<BR/>
-	<input type = "radio" name ="ventaPago" value = "OtroAlmacen"  /> Otro Almacen
+	<input type = "radio" name ="ventaPago" value = "OtroAlmacen"  /> Otro Almacen (Saleem bhai, Haneef, etc..)
 
 </div><Br/>
 
@@ -49,6 +52,9 @@ Total:<BR/>
 
 
 <input type="submit" value="Marcar Venta">
+
+</div>
+
 <BR/><Br/>Ultima venta: <Br/>
 <div id="ultimaVenta"></div>
 

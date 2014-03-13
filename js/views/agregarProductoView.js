@@ -3,7 +3,8 @@ var agregarProductoView = Backbone.View.extend({
         'click #agregarProducto :submit': 'submitForm'
 	},
     className: "content",
-    submitForm: function(){
+    submitForm: function(event){
+        event.preventDefault();
         var el = this.$el;
         var id = el.find('input[name="id"]').val();
         var name = el.find('input[name="name"]').val();

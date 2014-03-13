@@ -8,18 +8,18 @@ var modificarProductoView = Backbone.View.extend({
 	    self  = this;
 	    el = this.$el;
 	    if(self.model !== undefined){
-		var name = el.find("input[name='name']").val();
-		self.model.set("name", name);
-		self.model.save({}, {
-			success: function(model, response){
-			    if(response == "1"){
-				alert('Producto Modificado Correctamente');
-			    }
-			},
-			    error: function(){
-			    alert('Falla en modificacion');
-			}
-	       });
+			var name = el.find("input[name='name']").val();
+			self.model.set("name", name);
+			self.model.save({}, {
+				success: function(model, response){
+				    if(response == "1"){
+					alert('Producto Modificado Correctamente');
+				    }
+				},
+				    error: function(){
+				    alert('Falla en modificacion');
+				}
+		       });
 	    }
 	},
 	mostrarDetallesProducto: function() {
