@@ -56,7 +56,7 @@ var modificarProductoView = Backbone.View.extend({
 	self.load();
     	 $.get('js/templates/modificarProductoViewTemplate.html', function (data) {
             template = _.template($(data).html(), {});
-            self.$el.html(template);
+            self.$el.html(template).hide().fadeIn("slow");
         }, 'html');
 
         return this;

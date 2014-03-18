@@ -41,7 +41,7 @@ var referenciaBuscarView = Backbone.View.extend({
     	this.load();
     	 $.get('js/templates/referenciaBuscarMenuTemplate.html', function (data) {
             template = _.template($(data).html(), {});//Option to pass any dynamic values to template
-            self.$el.html(template);//adding the template content to the main template.
+            self.$el.html(template).hide().fadeIn("slow");
         }, 'html');
 
         return this;

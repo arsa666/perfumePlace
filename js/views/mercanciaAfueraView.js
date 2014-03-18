@@ -54,7 +54,7 @@ var mercanciaAfueraView = Backbone.View.extend({
     	self = this;
     	 $.get('js/templates/mercanciaAfueraViewTemplate.html', function (data) {
             template = _.template($(data).html(), {});
-            self.$el.html(template);
+            self.$el.html(template).hide().fadeIn("slow");
         }, 'html');
 
         return this;

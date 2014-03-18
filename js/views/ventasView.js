@@ -53,8 +53,8 @@ var ventasView = Backbone.View.extend({
 			success: function (model, response) {            
 	            if(response === 0){
 	            	alert('Venta Registrada Correctamente');
-	            	var ultima = "Cod:"+model.coid+" <BR/> Nombre:"+model.nombre+" <BR/> Precio: "+model.precioVenta+"<BR/>Cantidad:"+model.cantidad+" <BR/>Tipo Venta: "+model.tipoVenta+"<BR/>Nombre Cliente:"+model.nombreCliente+" <BR/> Numero Cliente: "+model.numeroCliente+"<BR/> Total:"+model.total+"<BR/> Forma de Pago: "+model.formaPago + "<BR/>Nombre del almacen: "+model.otroAlmacen;
-	                el.find("#ultimaVenta").html(ultima);
+	            	var ultimaVenta = new ultimaVentaView({model:model});
+	                el.find("#ultimaVenta").html(ultimaVenta.render().el);
 	            }else{
 	            	alert('Solo quedan: ' +response+ ' piezas en la sala de venta con codigo de barra: ' +model.coid);
 	            }
@@ -69,15 +69,15 @@ var ventasView = Backbone.View.extend({
 		var el  = this.$el;
 		var val = el.find("[name=ventaPago]:checked").val();
 		if(val === "Credito"){
-			el.find("#credito").show();
+			el.find(".credito").show();
 			el.find("#nombreAlmacen").hide();
 
 		}else if(val === "OtroAlmacen"){
-			el.find("#credito").hide();
+			el.find(".credito").hide();
 			el.find(":radio[value='B']").click();
 			el.find("#nombreAlmacen").show();
 		}else{
-			el.find("#credito").hide();
+			el.find(".credito").hide();
 			el.find("#nombreAlmacen").hide();
 		}
 	},
@@ -137,8 +137,9 @@ var ventasView = Backbone.View.extend({
 	
     	 $.get('js/templates/ventasViewTemplate.html', function (data) {
 		 template = _.template($(data).html(), {month:month, day:day, year:year});
-            self.$el.html(template);
+            self.$el.html(template).hide().fadeIn("slow");
         }, 'html');
+
 
         return this;
     }

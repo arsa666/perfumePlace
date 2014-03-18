@@ -1,62 +1,35 @@
 <script type='text/template'>
-<div class="form">
+<div class="form caja">
 <h1>CAJA DIA <%= day+"/"+month+"/"+year %></h1>
 
-<div>
-Codigo del Producto<BR/>
-<input type="text" id="ventasCod" /><BR/>
+<table border="1" class="ventas-tabla">
+<tr><td style="width:30px"><label>Codigo de Barra</label></td><td style="width:225px;"><input type="text" id="ventasCod" /></td></tr>
 
-Nombre del Producto:<div id="ventasNombre"></div><BR/>
-</div>
+<tr><td><label>Precio de Venta</label></td><td><input type="text" id="ventasPrecio" /></td></tr>
 
+<tr><td><label>Cantidad</label></td><td><input type="text" id="ventasCantidad" value="1" /></td></tr>
 
-Precio de Venta:<BR/>
-<input type="text" id="ventasPrecio" /><BR/>
+<tr><td><label>Tipo de venta</label></td><td> <input type = "radio" name ="ventaCategory" value = "A" checked = "checked" />Tipo A <BR/>
+<input type = "radio" name ="ventaCategory" value = "B"  />Tipo B </td></tr>
 
-Cantidad:<BR/>
-<input type="text" id="ventasCantidad" value="1" /><BR/>
-<BR/>
-Tipo de venta:<Br/>
-Tipo A: <input type = "radio" name ="ventaCategory" value = "A" checked = "checked" />
-Tipo B: <input type = "radio" name ="ventaCategory" value = "B"  />
-<Br/><Br/>
-
-<div id="#formaPago">
-	Forma de Pago:<BR/>
-	 <input type = "radio" name ="ventaPago" value="Tarjeta"/> Tarjeta (Visa, Master Card, Clave)<BR/>
+<tr><td><label>Forma de Pago</label></td><td id="#formaPago"> <input type = "radio" name ="ventaPago" value="Tarjeta"/> Tarjeta de Credito<BR/>
 	<input type = "radio" name ="ventaPago" value="Efectivo" checked="checked"/> Efectivo<BR/> 
-	<input type = "radio" name ="ventaPago" value = "Credito"  /> CREDITO<BR/>
-	<input type = "radio" name ="ventaPago" value = "OtroAlmacen"  /> Otro Almacen (Saleem bhai, Haneef, etc..)
+	<input type = "radio" name ="ventaPago" value = "Credito"  /> Credito (Paisano)<BR/>
+	<input type = "radio" name ="ventaPago" value = "OtroAlmacen"  /> Otro Almacen
+</td></tr>
 
-</div><Br/>
+<tr id="nombreAlmacen" style="display:none"><td><label>Nombre del Almacen</label></td><td><input type="text" name="nombreAlmacen" placeholder="nombre del almacen al que se le dio perfume o sabana" /></td></tr>
 
-<div id="nombreAlmacen" style="display:none">
-Nombre del Almacen:<Br/>
-	<input type="text" name="nombreAlmacen" placeholder="nombre del almacen al que se le dio perfume o sabana" />
-</div>
-<BR/><BR/>
+<tr class="credito" style="display:none"><td><label>NOMBRE del Cliente</label></td><td><input type="text" id="ventasCliente" placeholder="nombre del cliente" /></td></tr>
+<tr class="credito" style="display:none"><td><label>Telefono del Cliente</label></td><td><input type="text" id="numeroCliente" placeholder="numero del cliente" /></td></tr>
 
-<div id="credito" style="display:none">
+<tr><td><label>Total</label></td><td><input type="text" id="ventasTotal" /></td></tr>
 
-	NOMBRE del Cliente:<BR/>
-	<input type="text" id="ventasCliente" placeholder="nombre del cliente" /><BR/>
-	<BR/>
-	Telefono del Cliente:<BR/>
-	<input type="text" id="numeroCliente" placeholder="numero del cliente" /><BR/>
-	<BR/>
-</div>
+<tr><td><input type="submit" value="Marcar Venta"></td></tr>
+</table>
+<div class="ventas-nombre">Producto: <span id="ventasNombre"></span></div>
 
-
-Total:<BR/>
-<input type="text" id="ventasTotal" /><BR/>
-
-
-<input type="submit" value="Marcar Venta">
-
-</div>
-
-<BR/><Br/>Ultima venta: <Br/>
-<div id="ultimaVenta"></div>
+<div id="ultimaVenta" class="ultima-venta"></div>
 
 
 
