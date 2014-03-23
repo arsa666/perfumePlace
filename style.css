@@ -163,14 +163,12 @@ display:none;
     position:absolute;
     left:676px;
     top:110px;
-    border:solid green;
 }
 
 .ultima-venta{
     position: absolute;
     left:676px;
     top:250px;
-    border:solid red;
 }
 
 .ultima-venta-view span{
