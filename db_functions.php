@@ -1,21 +1,5 @@
 <?php
-  //database classs written by: Arsalan Ahmed
-
-
-  function openDB()
-  {
-    
-    // Create connection
-    $con=mysqli_connect("localhost","root","666arsa666","arsa666_perfumePlace");
-
-    // Check connection
-    if(mysqli_connect_errno())
-    {
-      echo "Failed to connect to MySQL: " . mysqli_connect_error();
-    }
-
-    return $con;
-  }
+  //database classs written by: Arsalan Ahmed 
 
 function getTotalAvailable($con, $table, $id){
 
@@ -84,7 +68,7 @@ function getTotalAvailable($con, $table, $id){
  }
 
 
-function insertMercanciaAfuera($con, $id, $name, $cantidad){
+function insertMercanciaAfuera($con, $id, $cantidad){
   $id = $id;
   $cantidad = (int)$cantidad;
   
@@ -255,12 +239,5 @@ function getProductoCollection($con)
 
     }
     $stmt->close();
-  }
-
-  
-  function closeDB($con)
-  {
-    mysqli_close($con);
-  }//close
-
+  } 
 ?>

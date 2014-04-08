@@ -1,4 +1,7 @@
-<?php include('../db_functions.php'); 
+<?php 
+include('../db_handler.php'); 
+include('../db_functions.php'); 
+
 
  $db = openDB();
 

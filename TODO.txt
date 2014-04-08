@@ -1,9 +1,6 @@
-* gastos table 
-  *make a way to insert gastos. 
-  * 
+1) Make sure cliente credito is registered before doing a sell.
+2) Send email at the end of the day report.
+3) Send email when inserting into bodega.
+4) gastos table 
+5) make a way to insert gastos. 
 
-1) make sure cliente credito is registered before doing a sell.
-2) make a file of the username and password of the db.
-3) extract all funcionality to each individual api file instead of using a db_functions file.
-4) validations and security de todo tipo.
-5) make the application look nice. 
