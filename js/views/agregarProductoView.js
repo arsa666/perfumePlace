@@ -1,8 +1,25 @@
 var agregarProductoView = Backbone.View.extend({
 	events: {
-        'click #agregarProducto :submit': 'submitForm'
+        'click #agregarProducto :submit': 'submitForm',
+        "keyup #agregarCOD": "displayProductoDetails"
+
 	},
     className: "content",
+    displayProductoDetails: function () {
+        el = this.$el;
+        id = el.find("#agregarCOD").val();
+
+        if (id !== "") {
+            model = this.collection.get({"id":String(id)});
+            if (model !== undefined){
+                el.find("#agregarDetails").val(model.get("name"));
+            }else{
+                el.find("#agregarDetails").val("");
+            }
+        }else{
+                el.find("#agregarDetails").val("");
+        }
+    },
     submitForm: function(event){
         event.preventDefault();
         var el = this.$el;
@@ -11,20 +28,20 @@ var agregarProductoView = Backbone.View.extend({
         model = this.collection.get({"id":String(id)});
 
         if(model !== undefined){
-            alert('Este producto ya esta registrado con el id: ' + id);
+            alert('Este producto ya esta registrado con el codigo de barra: ' + id);
             return;
         }
 
 	var producto = new productoModel({id:id, name:name});
         producto.save({}, {
-        success: function (model, response) {            
+        success: function (model, response) {
             if(response == "1"){
-                //App.productos.refresh();
-                el.find("#agregadoCorrecto").html("Se ha agregado el producto a la base de datos");
+                App.productos.add(model);
+                alert("Se ha agregado el producto a la base de datos");
             }
         },
         error: function (model, response) {
-            alert('Error al insertar producto, contacte administrador.');
+            alert('Error: ' + response.responseText);
         }
 });
     },
@@ -34,7 +51,7 @@ var agregarProductoView = Backbone.View.extend({
     	 $.get('js/templates/agregarProductoTemplate.html', function (data) {
             template = _.template($(data).html(), {});//Option to pass any dynamic values to template
             self.$el.html(template).hide().fadeIn("slow");
-            
+
         }, 'html');
 
         return this;

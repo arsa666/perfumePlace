@@ -111,13 +111,11 @@ function insertMercanciaBodega($con, $id, $name, $cantidad){
     return $checkInsertion;
 }
 
-function ventaRegistrar($con, $coid, $nombre ,$precioVenta, $cantidad, $tipoVenta, $total, $nombreCliente, $numeroCliente, $formaPago, $otroAlmacen){
+function ventaRegistrar($con, $coid, $nombre ,$precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen){
   
   $precioVenta = (double)$precioVenta;
   $cantidad = (int)$cantidad;
   $total = (double)$total;
-  $numeroCliente = (int)$numeroCliente;
-
 
   if(is_numeric($coid) == false){
       return 0;
@@ -126,8 +124,8 @@ function ventaRegistrar($con, $coid, $nombre ,$precioVenta, $cantidad, $tipoVent
     $cantidadAfuera =  getTotalAvailable($con, "MercanciaAfuera", $coid);
     $total = $cantidadAfuera - $cantidad;
     if($total >= 0 && $cantidadAfuera !== 0){
-        if($stmt = $con->prepare ("INSERT INTO VentasDiarias (coid, nombre, precioVenta, cantidad, tipoVenta, total, nombreCliente, numeroCliente, formaPago, otroAlmacen) values (?,?,?,?,?,?,?,?,?,?)")){
-              if (!$stmt->bind_param("ssdisdsiss", $coid, $nombre, $precioVenta, $cantidad, $tipoVenta, $total, $nombreCliente, $numeroCliente, $formaPago, $otroAlmacen)){
+        if($stmt = $con->prepare ("INSERT INTO VentasDiarias (coid, nombre, precioVenta, cantidad, tipoVenta, total, cedulaCliente, formaPago, otroAlmacen) values (?,?,?,?,?,?,?,?,?)")){
+              if (!$stmt->bind_param("ssdisdsss", $coid, $nombre, $precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen)){
                  echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
                  $response = "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error; 
                  return $resonse; 

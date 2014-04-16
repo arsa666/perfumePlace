@@ -13,28 +13,33 @@ var modificarProductoView = Backbone.View.extend({
 			self.model.save({}, {
 				success: function(model, response){
 				    if(response == "1"){
-					alert('Producto Modificado Correctamente');
+						alert('Producto Modificado Correctamente');
 				    }
 				},
-				    error: function(){
-				    alert('Falla en modificacion');
+				error: function(){
+				    	alert('Falla en modificacion');
 				}
-		       });
+		    });
 	    }
 	},
 	mostrarDetallesProducto: function() {
 	    el = this.$el;
 	    self = this;
 	    idVal = el.find("#modificarId").val();
-	    
+
 	    if(idVal !== ""){
-		model = this.collection.get({"id":String(idVal)});
-		if(model != undefined){
-		    self.model = model;
-		    el.find("#informacionProducto").show();
-		    el.find("input[name='name']").val(model.get("name"));
-		}
-	    }	    
+			model = this.collection.get({"id":String(idVal)});
+			if(model != undefined){
+			    self.model = model;
+			    el.find("input[name='name']").val(model.get("name"));
+			} else {
+	    		self.model = undefined;
+			    el.find("input[name='name']").val("No existe este producto");
+			}
+	    } else {
+	    	self.model = undefined;
+			el.find("input[name='name']").val("");
+	    }
 	},
 	load: function(){
 	    self = this;

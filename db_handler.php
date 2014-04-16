@@ -3,7 +3,7 @@ function openDB()
   {
     
     // Create connection
-    $con=mysqli_connect("localhost","root","","arsa666_perfumePlace");
+    $con=mysqli_connect("localhost","root","666arsa666","arsa666_perfumePlace");
 
     // Check connection
     if(mysqli_connect_errno())

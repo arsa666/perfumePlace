@@ -18,15 +18,13 @@ var ventasView = Backbone.View.extend({
 		var categoria = el.find("[name=ventaCategory]:checked").val();
 		var ventaPago = el.find("[name=ventaPago]:checked").val();
 		var otroAlmacen = el.find("input[name='nombreAlmacen']").val();
-		var ventasCliente = '';
-		var numeroCliente = '';
+		var cedulaCliente = '';
 
 		if(ventaPago === "Credito"){
-			ventasCliente = el.find("#ventasCliente").val();
-			numeroCliente = el.find("#numeroCliente").val();
+			cedulaCliente = el.find("#cedulaCliente").val();
 
-			if(ventasCliente === "" || numeroCliente === ""){
-				alert('No puede dejar el nombre del cliente o el numero del cliente en venta de Credito');
+			if(cedulaCliente === ""){
+				alert('No puede dejar la cedula del cliente en blanco en venta de Credito');
 				return;
 			}
 		}
@@ -47,10 +45,10 @@ var ventasView = Backbone.View.extend({
 			return;
 		}
 
-		var ventas = new ventasModel({coid:cod, nombre:nombre, precioVenta:precio, cantidad:cantidad, tipoVenta:categoria, nombreCliente: ventasCliente, numeroCliente: numeroCliente, total:total, formaPago: ventaPago, otroAlmacen: otroAlmacen });
+		var ventas = new ventasModel({coid:cod, nombre:nombre, precioVenta:precio, cantidad:cantidad, tipoVenta:categoria, cedulaCliente: cedulaCliente, total:total, formaPago: ventaPago, otroAlmacen: otroAlmacen });
 
 		ventas.save({}, {
-			success: function (model, response) {            
+			success: function (model, response) {
 	            if(response === 0){
 	            	alert('Venta Registrada Correctamente');
 	            	var ultimaVenta = new ultimaVentaView({model:model});
@@ -134,7 +132,7 @@ var ventasView = Backbone.View.extend({
 		var month = d.getMonth() + 1;
 		var day = d.getDate();
 		var year = d.getFullYear();
-	
+
     	 $.get('js/templates/ventasViewTemplate.html', function (data) {
 		 template = _.template($(data).html(), {month:month, day:day, year:year});
             self.$el.html(template).hide().fadeIn("slow");

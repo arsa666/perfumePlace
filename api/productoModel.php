@@ -8,6 +8,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
 	$name = $data->{'name'};
 
 	//sanitation checks
+    if(ctype_alnum($id) == false){
+      echo "Solo se permite numeros o letras en el codigo de barra, y no espacio en blanco";
+      return;
+    }
+
  	$db = openDB();
 
  	$results = updateOrCreateProducto($db, $id, $name);
