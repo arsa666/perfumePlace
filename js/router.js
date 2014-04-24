@@ -1,6 +1,6 @@
-window.onload = function () {
-    Backbone.history.navigate("", {trigger:true});
-}; 
+// window.onload = function () {
+//     Backbone.history.navigate("", {trigger:true});
+// };
 
 window.App = {};
 
@@ -8,18 +8,9 @@ var MessageRouter = Backbone.Router.extend({
     initialize:function(){
         App.productos = new productoCollection();
         App.productos.fetch();
-        //App.views = new Array();
         App.currentView;
         $('#main').empty();
-        // Backbone.history.bind("all", function () {
-        //     var url = Backbone.history.fragment;
-        //     if (!_.isUndefined(App.menuView)) {
-        //         App.menuView.$el.find('.active').removeClass("active");
-        //         var url = "#/" + url;
-        //         App.menuView.$el.find('a[href="'+url+'"]').addClass("active");
-        //     }
-
-        // });
+        this.menuDisplay();
     },
     routes:{
         ""      : "menuDisplay",
@@ -27,66 +18,49 @@ var MessageRouter = Backbone.Router.extend({
         "ventas": "displayVentas",
         "compras": "displayCompras",
         "mercanciaAfuera": "mercanciaAfuera",
-	"mercanciaBodega": "mercanciaBodega",
+	    "mercanciaBodega": "mercanciaBodega",
         "referencias": "displayReferencias",
         "depositos": "displayDepositos",
         "abonos": "displayAbonos",
         "gastos": "displayGastos",
         "agregar": "displayAgregarProductoNuevo",
-	"modificar": "displayModificarProducto"
-    },
-    clienteCredito: function () {
-        closeView(App.currentView);
-        var clienteCredito = new clienteCreditoView({});
-        App.currentView = clienteCredito;
-        $('#main').append(clienteCredito.render().el);
+	    "modificar": "displayModificarProducto"
     },
     menuDisplay: function () {
         App.menuView = new menuView({});
-        $('#main').html(App.menuView.render().el);
     },
-    mercanciaBodega: function () {	
-        closeView(App.currentView);
+    clienteCredito: function () {
+        var clienteCredito = new clienteCreditoView({});
+        this._cleanView(clienteCredito);
+    },
+    mercanciaBodega: function () {
         var mercanciaBodega = new mercanciaBodegaView({collection: App.productos});
-        App.currentView = mercanciaBodega;
-        $('#main').append(mercanciaBodega.render().el);
+        this._cleanView(mercanciaBodega);
     },
     mercanciaAfuera: function () {
-        closeView(App.currentView);
-
         var mercanciaAfuera = new mercanciaAfueraView({collection: App.productos});
-        App.currentView = mercanciaAfuera;
-        $('#main').append(mercanciaAfuera.render().el);
+        this._cleanView(mercanciaAfuera);
     },
     displayModificarProducto: function () {
-        closeView(App.currentView);
-
-	var modificar = new modificarProductoView({collection: App.productos});
-        App.currentView = modificar;    
-	$('#main').append(modificar.render().el);
+	   var modificar = new modificarProductoView({collection: App.productos});
+        this._cleanView(modificar);
     },
-    displayVentas: function(){	        
-        closeView(App.currentView);
-
+    displayVentas: function(){
         var ventas = new ventasView({collection:App.productos});
-        App.currentView = ventas;        
-        $('#main').append(ventas.render().el);        
+        this._cleanView(ventas);
     },
-    displayReferencias: function(){     
-        closeView(App.currentView);
-
+    displayReferencias: function(){
         var referenciaBuscar = new referenciaBuscarView({collection: App.productos});
-        App.currentView = referenciaBuscar;        
-        $('#main').append(referenciaBuscar.render().el);
+        this._cleanView(referenciaBuscar);
     },
-    displayAgregarProductoNuevo: function(){ 
-        closeView(App.currentView);
-
+    displayAgregarProductoNuevo: function(){
         var agregarProducto = new agregarProductoView({collection: App.productos});
-        App.currentView = agregarProducto;
-        $('#main').append(agregarProducto.render().el);
+        this._cleanView(agregarProducto);
+    },
+    _cleanView: function (view) {
+        closeView(App.currentView);
+        App.currentView = view;
     }
-
 });
 
 var router  = new MessageRouter();

@@ -145,10 +145,7 @@ display:none;
     padding: 10px 25px 10px 25px;
     color: #FFF;
     text-shadow: 1px 1px 1px #949494;
-}
-.form input[type="submit"] {
-    background-color:#80A24A;
-    font-size:20px;
+    font-size:20px;   
 }
 
 .form table{
@@ -238,8 +235,7 @@ top:1px;
 
 
 .active, .active:hover{
-    border:solid white 2px;
-    
-    top:1px;
+    border:solid white 5px;
+    color: red;    
 }
 

@@ -1,4 +1,12 @@
 var modificarProductoView = Backbone.View.extend({
+    initialize:function () {
+        self = this;
+         $.get('js/templates/clienteCreditoViewTemplate.html', function (data) {
+            template = _.template($(data).html(), {});
+            self.$el.html(template);
+            $('#main').append(self.$el.html());//.hide().fadeIn("slow");
+        }, 'html');
+    },
 	events:{
 	    'keyup #modificarId': 'mostrarDetallesProducto',
 	    'click #informacionProducto :submit': 'submitForm'
@@ -58,7 +66,7 @@ var modificarProductoView = Backbone.View.extend({
 	},
     render:function() {
     	self = this;
-	self.load();
+		self.load();
     	 $.get('js/templates/modificarProductoViewTemplate.html', function (data) {
             template = _.template($(data).html(), {});
             self.$el.html(template).hide().fadeIn("slow");
