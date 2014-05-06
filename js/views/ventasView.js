@@ -53,6 +53,9 @@ var ventasView = Backbone.View.extend({
 	            	alert('Venta Registrada Correctamente');
 	            	var ultimaVenta = new ultimaVentaView({model:model});
 	                el.find("#ultimaVenta").html(ultimaVenta.render().el);
+	            }else if (response === 10){
+	            	alert('"Cliente con cedula: ' + cedulaCliente + ' no existe, porfavor registre el cliente en la seccion de registrar cliente. "');
+
 	            }else{
 	            	alert('Solo quedan: ' +response+ ' piezas en la sala de venta con codigo de barra: ' +model.coid);
 	            }

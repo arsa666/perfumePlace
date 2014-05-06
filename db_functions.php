@@ -111,6 +111,33 @@ function insertMercanciaBodega($con, $id, $name, $cantidad){
     return $checkInsertion;
 }
 
+function checkClienteCredito($con, $cedula) {
+    if($stmt = $con->prepare("SELECT * FROM ClienteCredito where cedula=?")){ 
+        $id = (string)$cedula;
+        if (!$stmt->bind_param("s", $id)){
+            $response = mysqli_stmt_errno($stmt);  
+            return $response;
+        }
+        if(!$stmt->execute()){
+           $response = mysqli_stmt_errno($stmt);  
+           return $response;
+       }
+    $cedulaCliente = null;
+    $nombre = null;
+    $telefono = null;
+    /* Bind results */
+    $stmt->bind_result($cedulaCliente, $nombre, $telefono);    
+    /* Fetch the value */
+    $stmt->fetch();
+    $stmt->close();
+    if($cedulaCliente === null){
+      return false;
+    } else{
+      return true;
+    }
+  }
+}
+
 function ventaRegistrar($con, $coid, $nombre ,$precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen){
   
   $precioVenta = (double)$precioVenta;
@@ -124,11 +151,17 @@ function ventaRegistrar($con, $coid, $nombre ,$precioVenta, $cantidad, $tipoVent
     $cantidadAfuera =  getTotalAvailable($con, "MercanciaAfuera", $coid);
     $total = $cantidadAfuera - $cantidad;
     if($total >= 0 && $cantidadAfuera !== 0){
+      if($formaPago == 'Credito') {//if credito venta then check for valid clientecredito. 
+          $clienteBool = checkClienteCredito($con, $cedulaCliente);
+          if($clienteBool === false) {
+            return 10;//cedula cliente error
+          }          
+      }
         if($stmt = $con->prepare ("INSERT INTO VentasDiarias (coid, nombre, precioVenta, cantidad, tipoVenta, total, cedulaCliente, formaPago, otroAlmacen) values (?,?,?,?,?,?,?,?,?)")){
               if (!$stmt->bind_param("ssdisdsss", $coid, $nombre, $precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen)){
                  echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
                  $response = "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error; 
-                 return $resonse; 
+                 return $response; 
               }
               if (!$stmt->execute()) {
                   echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;   

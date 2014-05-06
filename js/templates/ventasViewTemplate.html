@@ -3,7 +3,7 @@
 <h1>CAJA DIA <%= day+"/"+month+"/"+year %></h1>
 
 <table border="0" class="ventas-tabla">
-<tr><td style="width:30px"><label>Codigo de Barra</label></td><td style="width:225px;"><input type="text" id="ventasCod" /></td></tr>
+<tr><td style="width:30px"><label>Codigo de Barra</label></td><td style="width:500px;"><input type="text" id="ventasCod" /></td></tr>
 
 <tr><td><label>Precio de Venta</label></td><td><input type="text" id="ventasPrecio" /></td></tr>
 
@@ -12,8 +12,10 @@
 <tr><td><label>Tipo de venta</label></td><td> <input type = "radio" name ="ventaCategory" value = "A" checked = "checked" />Tipo A <BR/>
 <input type = "radio" name ="ventaCategory" value = "B"  />Tipo B </td></tr>
 
-<tr><td><label>Forma de Pago</label></td><td id="#formaPago"> <input type = "radio" name ="ventaPago" value="Tarjeta"/> Tarjeta de Credito<BR/>
-	<input type = "radio" name ="ventaPago" value="Efectivo" checked="checked"/> Efectivo<BR/> 
+<tr><td><label>Forma de Pago</label></td><td id="#formaPago"> 
+    <input type = "radio" name ="ventaPago" value="TarjetaCredito"/> Tarjeta de Credito (Master Card, VISA)<BR/>
+    <input type = "radio" name ="ventaPago" value="TarjetaClave"/> Tarjeta Clave (Debito)<BR/>
+	<input type = "radio" name ="ventaPago" value="Efectivo" checked="checked"/> Efectivo<BR/>
 	<input type = "radio" name ="ventaPago" value = "Credito"  /> Credito (Paisano)<BR/>
 	<input type = "radio" name ="ventaPago" value = "OtroAlmacen"  /> Otro Almacen
 </td></tr>
@@ -27,15 +29,15 @@
 <tr class="credito" style="display:none"><td><label>NOMBRE del Cliente</label></td><td><div id="ventasCliente"></div></td></tr>
 <tr class="credito" style="display:none"><td><label>Telefono del Cliente</label></td><td><div id="numeroCliente"></div></td></tr>
 
+<tr><td>Producto: </td><td><span id="ventasNombre"></span></td></tr>
+
 <tr><td><label>Total</label></td><td><input type="text" id="ventasTotal" /></td></tr>
 
 <tr><td><input type="submit" value="Marcar Venta"></td></tr>
 </table>
-<div class="ventas-nombre">Producto: <span id="ventasNombre"></span></div>
+
+<!--
 
 <div id="ultimaVenta" class="ultima-venta"></div>
-
-
-
-
+-->
 </script>

@@ -28,13 +28,13 @@ var MessageRouter = Backbone.Router.extend({
         "ventas": "displayVentas",
         "compras": "displayCompras",
         "mercanciaAfuera": "mercanciaAfuera",
-	"mercanciaBodega": "mercanciaBodega",
+	    "mercanciaBodega": "mercanciaBodega",
         "referencias": "displayReferencias",
         "depositos": "displayDepositos",
         "abonos": "displayAbonos",
         "gastos": "displayGastos",
         "agregar": "displayAgregarProductoNuevo",
-	"modificar": "displayModificarProducto"
+	    "modificar": "displayModificarProducto"
     },
     //MENU
      menuDisplay: function () {
