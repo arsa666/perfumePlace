@@ -1,6 +1,6 @@
-window.onload = function () {
-    Backbone.history.navigate("", {trigger:true});
-}; 
+// window.onload = function () {
+//     Backbone.history.navigate("", {trigger:true});
+// };
 
 window.App = {};
 
@@ -11,6 +11,7 @@ var MessageRouter = Backbone.Router.extend({
         //App.views = new Array();
         App.currentView;
         $('#main').empty();
+        this.menuDisplay();
         // Backbone.history.bind("all", function () {
         //     var url = Backbone.history.fragment;
         //     if (!_.isUndefined(App.menuView)) {
@@ -35,56 +36,50 @@ var MessageRouter = Backbone.Router.extend({
         "agregar": "displayAgregarProductoNuevo",
 	"modificar": "displayModificarProducto"
     },
+    //MENU
+     menuDisplay: function () {
+        App.menuView = new menuView({});
+        App.menuView.render();
+    },
+    _attachAndRenderView: function (view) {
+        App.currentView = view;
+        $('#main').append(view.render().el);
+    },
+    //menu views
     clienteCredito: function () {
         closeView(App.currentView);
         var clienteCredito = new clienteCreditoView({});
-        App.currentView = clienteCredito;
-        $('#main').append(clienteCredito.render().el);
+        this._attachAndRenderView(clienteCredito);
     },
-    menuDisplay: function () {
-        App.menuView = new menuView({});
-        $('#main').html(App.menuView.render().el);
-    },
-    mercanciaBodega: function () {	
+    mercanciaBodega: function () {
         closeView(App.currentView);
         var mercanciaBodega = new mercanciaBodegaView({collection: App.productos});
-        App.currentView = mercanciaBodega;
-        $('#main').append(mercanciaBodega.render().el);
+        this._attachAndRenderView(mercanciaBodega);
     },
     mercanciaAfuera: function () {
         closeView(App.currentView);
-
         var mercanciaAfuera = new mercanciaAfueraView({collection: App.productos});
-        App.currentView = mercanciaAfuera;
-        $('#main').append(mercanciaAfuera.render().el);
+        this._attachAndRenderView(mercanciaAfuera);
     },
     displayModificarProducto: function () {
         closeView(App.currentView);
-
-	var modificar = new modificarProductoView({collection: App.productos});
-        App.currentView = modificar;    
-	$('#main').append(modificar.render().el);
+	    var modificar = new modificarProductoView({collection: App.productos});
+        this._attachAndRenderView(modificar);
     },
-    displayVentas: function(){	        
+    displayVentas: function(){
         closeView(App.currentView);
-
         var ventas = new ventasView({collection:App.productos});
-        App.currentView = ventas;        
-        $('#main').append(ventas.render().el);        
+        this._attachAndRenderView(ventas);
     },
-    displayReferencias: function(){     
+    displayReferencias: function(){
         closeView(App.currentView);
-
         var referenciaBuscar = new referenciaBuscarView({collection: App.productos});
-        App.currentView = referenciaBuscar;        
-        $('#main').append(referenciaBuscar.render().el);
+        this._attachAndRenderView(referenciaBuscar);
     },
-    displayAgregarProductoNuevo: function(){ 
+    displayAgregarProductoNuevo: function(){
         closeView(App.currentView);
-
         var agregarProducto = new agregarProductoView({collection: App.productos});
-        App.currentView = agregarProducto;
-        $('#main').append(agregarProducto.render().el);
+        this._attachAndRenderView(agregarProducto);
     }
 
 });

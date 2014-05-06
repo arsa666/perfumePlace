@@ -2,7 +2,11 @@
 <body>
 
 
-    <div id="main">Template text</div>
+    <div id="main">
+        <div id='menu'></div>
+
+    </div>
+
 
 
 </body>
