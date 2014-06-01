@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
 	$tipoVenta = $data->{'tipoVenta'};
 	$cedulaCliente = $data->{'cedulaCliente'};
 	$total = $data->{'total'};
+    
 	$formaPago = $data->{'formaPago'};
 	$otroAlmacen = $data->{'otroAlmacen'};
 

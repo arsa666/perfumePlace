@@ -4,23 +4,28 @@
 
 window.App = {};
 
+
+
+
 var MessageRouter = Backbone.Router.extend({
     initialize:function(){
         App.productos = new productoCollection();
-        App.productos.fetch();
+        App.clientesCredito = new clienteCollection();
+
+
+        App.clientesCredito.fetch();
         //App.views = new Array();
         App.currentView;
         $('#main').empty();
         this.menuDisplay();
-        // Backbone.history.bind("all", function () {
-        //     var url = Backbone.history.fragment;
-        //     if (!_.isUndefined(App.menuView)) {
-        //         App.menuView.$el.find('.active').removeClass("active");
-        //         var url = "#/" + url;
-        //         App.menuView.$el.find('a[href="'+url+'"]').addClass("active");
-        //     }
-
-        // });
+        Backbone.history.bind("all", function () {
+            var url = Backbone.history.fragment;
+            if (!_.isUndefined(App.menuView)) {
+                $('body').find('.active').removeClass("active");
+                var url = "#/" + url;
+                $('body').find('a[href="'+url+'"]').addClass("active");
+            }
+        });
     },
     routes:{
         ""      : "menuDisplay",

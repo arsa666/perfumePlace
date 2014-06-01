@@ -2,6 +2,7 @@ var menuView = Backbone.View.extend({
     events: {
     	'click .menuItem': 'selectItem',
     },
+    className: 'menu-view',
     selectItem: function (event) {
 
     },

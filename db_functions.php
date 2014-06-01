@@ -112,7 +112,7 @@ function insertMercanciaBodega($con, $id, $name, $cantidad){
 }
 
 function checkClienteCredito($con, $cedula) {
-    if($stmt = $con->prepare("SELECT * FROM ClienteCredito where cedula=?")){ 
+    if($stmt = $con->prepare("SELECT * FROM ClienteCredito where id=?")){ 
         $id = (string)$cedula;
         if (!$stmt->bind_param("s", $id)){
             $response = mysqli_stmt_errno($stmt);  
@@ -140,17 +140,17 @@ function checkClienteCredito($con, $cedula) {
 
 function ventaRegistrar($con, $coid, $nombre ,$precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen){
   
-  $precioVenta = (double)$precioVenta;
-  $cantidad = (int)$cantidad;
-  $total = (double)$total;
+  $precioVenta = floatval($precioVenta);
+  $cantidad = intval($cantidad);
+  $total = floatval($total);
 
   if(is_numeric($coid) == false){
       return 0;
     }
 
     $cantidadAfuera =  getTotalAvailable($con, "MercanciaAfuera", $coid);
-    $total = $cantidadAfuera - $cantidad;
-    if($total >= 0 && $cantidadAfuera !== 0){
+    $totalLeft = $cantidadAfuera - $cantidad;
+    if($totalLeft >= 0 && $cantidadAfuera !== 0){
       if($formaPago == 'Credito') {//if credito venta then check for valid clientecredito. 
           $clienteBool = checkClienteCredito($con, $cedulaCliente);
           if($clienteBool === false) {
@@ -158,6 +158,7 @@ function ventaRegistrar($con, $coid, $nombre ,$precioVenta, $cantidad, $tipoVent
           }          
       }
         if($stmt = $con->prepare ("INSERT INTO VentasDiarias (coid, nombre, precioVenta, cantidad, tipoVenta, total, cedulaCliente, formaPago, otroAlmacen) values (?,?,?,?,?,?,?,?,?)")){
+
               if (!$stmt->bind_param("ssdisdsss", $coid, $nombre, $precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen)){
                  echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
                  $response = "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error; 
@@ -185,7 +186,60 @@ function ventaRegistrar($con, $coid, $nombre ,$precioVenta, $cantidad, $tipoVent
 
 function getProductoCollection($con)
   {
-    $sql="SELECT * FROM Productos";
+    // $sql="SELECT * FROM Productos";
+    // $result=mysqli_query($con, $sql);
+
+    // $myArray = array();
+    // $i = 0;
+    // while($row = mysqli_fetch_array($result, MYSQL_ASSOC))
+    // {
+    //   array_push($myArray, $row);
+
+      
+    //   // if($i > )
+    //   //   break;
+
+    //   // $i++;
+    // }
+    // //mysqli_free_result($result);
+    // $myArray = json_encode($myArray);
+    // return $myArray;
+
+
+    ///
+
+
+    // if($stmt = $con->prepare("SELECT * FROM Productos"))
+    //   { 
+    //     $myArray = array();
+        
+    //     $stmt->execute();
+    //       /* Bind results */
+    //     $stmt->bind_result($id, $name, $size);
+    //     /* Fetch the value */
+    //     //$stmt->fetch();
+    //     //$json = array();
+
+    //      while ($row = $stmt->fetch()) {
+    //             $json = array();
+    //             $json['id'] = $id;
+    //             $json['name'] = $name;
+    //             $json['size'] = $size;
+    //             $json = json_encode($json);
+    //             array_push($myArray, $json);
+    //     }
+    //     $stmt->close();
+
+    //     return $myArray;
+    //     //return json_encode($json);
+    //   }
+
+
+  }
+
+  function getClientCollection($con)
+  {
+    $sql="SELECT * FROM ClienteCredito";
     $result=mysqli_query($con, $sql);
 
     $myArray = array();
@@ -197,7 +251,6 @@ function getProductoCollection($con)
     mysqli_free_result($result);
     $myArray = json_encode($myArray);
     return $myArray;
-
   }
 
   function getProducto($con, $id)
@@ -211,8 +264,7 @@ function getProductoCollection($con)
         }
         $stmt->execute();
           /* Bind results */
-        $stmt->bind_result($id, $name);
-
+        $stmt->bind_result($id, $name, $size);
         /* Fetch the value */
         $stmt->fetch();
         $stmt->close();
@@ -220,18 +272,18 @@ function getProductoCollection($con)
 
         $json['id'] = $id;
         $json['name'] = $name;
-        
+        $json['size'] = $size;
+
         return json_encode($json);
       }
   }
 
   function insertarClienteCredito($con, $cedula, $name, $celular){
-      if($stmt = $con->prepare ("INSERT INTO ClienteCredito (cedula, nombre, celular) values (?,?,?)")){
+      if($stmt = $con->prepare ("INSERT INTO ClienteCredito (id, nombre, celular) values (?,?,?)")){
                     if (!$stmt->bind_param("sss", $cedula,$name, $celular)){
                         $response = mysqli_stmt_errno($stmt);
                          return $response;
-                    }
-                    
+                    }                    
                     if (!$stmt->execute()) {
                       $response = mysqli_stmt_errno($stmt);
                       return $response;   

@@ -1,6 +1,7 @@
 var ventasView = Backbone.View.extend({
 	events:{
 	    'keyup #ventasCod': 'loadName',
+	    'keyup #cedulaCliente': 'loadCliente',
 	    'keyup #ventasPrecio': 'loadTotal',
 	    'keyup #ventasCantidad': 'loadTotal',
 	    'click input:radio[name=ventaPago]:checked': 'toggleOptions',
@@ -8,7 +9,9 @@ var ventasView = Backbone.View.extend({
 	    'click input:submit': 'submitForm'
 	},
 	className: "content",
-	submitForm: function () {
+	submitForm: function (e) {
+		e.preventDefault();
+		e.stopPropagation();
 		var el = this.$el;
 
 		var cod = el.find("#ventasCod").val();
@@ -50,9 +53,10 @@ var ventasView = Backbone.View.extend({
 		ventas.save({}, {
 			success: function (model, response) {
 	            if(response === 0){
+	            	el.find('form').trigger('reset');
 	            	alert('Venta Registrada Correctamente');
-	            	var ultimaVenta = new ultimaVentaView({model:model});
-	                el.find("#ultimaVenta").html(ultimaVenta.render().el);
+	            	//var ultimaVenta = new ultimaVentaView({model:model});
+	                //el.find("#ultimaVenta").html(ultimaVenta.render().el);
 	            }else if (response === 10){
 	            	alert('"Cliente con cedula: ' + cedulaCliente + ' no existe, porfavor registre el cliente en la seccion de registrar cliente. "');
 
@@ -95,6 +99,27 @@ var ventasView = Backbone.View.extend({
 		}
 
 		ventasTotal.val(total);
+	},
+	loadCliente: function () {
+		self = this;
+	    el = this.$el;
+
+	    id = el.find("#cedulaCliente").val();
+
+	    if(id !== ""){
+			model = App.clientesCredito.where({"cedula":String(id)});
+			if (model !== undefined && model.length > 0){
+
+			    el.find("#ventasCliente").html(model.nombre);
+			    el.find("#numeroCliente").html(model.celular);
+			    debugger;
+			}else{
+			    el.find("#ventasCliente").html("Este Cliente no existe");
+			}
+	    }else{
+            el.find("#ventasCliente").html("");
+			el.find("#numeroCliente").html("");
+	    }
 	},
 	loadName: function (){
 	    self = this;
