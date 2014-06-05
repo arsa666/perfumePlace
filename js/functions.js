@@ -1,5 +1,8 @@
 //function to close view and clean DOM.
 function closeView(view){
+    if(view !== undefined) {
+	console.log("Closing: " + view.cid);
+    }
 
     if(!_.isUndefined(view)){
 	view.unbind(); // Unbind all local event bindings
@@ -16,7 +19,7 @@ function closeView(view){
 
 	delete view.$el; // Delete the jQuery wrapped object variable
 	delete view.el; // Delete the variable reference to view node
-	console.log('closing view');
+	
     }
 }
 
@@ -53,6 +56,28 @@ function alertError(response){
     alert(msg);
 }
 
- function C(msg){
- 	console.log(msg);
- }
+function fetchAndDisplayProduct(model, el, val){
+    val = val || false;
+    model.fetch({
+	success: function (m) {	
+	    if(!_.isNull(m.get('name'))){//if exist because name is not null always
+		if (val === false) {
+		    el.find("#productoName").html(m.escape("name"));
+		    el.find("#productoSize").html(m.escape("size"));
+		} else{
+		    el.find("#productoName").val(m.escape("name"));
+		    el.find("#productoSize").val(m.escape("size"));
+		}
+	    } else {
+		el.find("#productoName").html("No existe este producto");
+		el.find("#productoSize").html("");
+	    }
+	}
+    });
+}
+
+
+function C(msg){
+    console.log(msg);
+}
+

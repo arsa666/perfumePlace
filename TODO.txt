@@ -6,8 +6,8 @@ buscar referencia change the way it looks for a model instead of using the colle
 Ingresar a la sala de venta fix error de ingresar falta un espacio despues de tranferido 9piezas.
 ingresar a la sala de ventas falta que fetch el model y no collection.
 ingresa a la sala de venta falta que salga el tamano.
+Ingresar a bodega no carga del modelo sino del collection.
 
-*Ingresar a bodega no carga del modelo sino del collection.
 *Ventas cambiar el fetch a modelo y no collection.
 *hacer q los forms se vean mas bonitos.
 

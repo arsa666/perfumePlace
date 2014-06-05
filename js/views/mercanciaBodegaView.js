@@ -9,14 +9,10 @@ var mercanciaBodegaView = Backbone.View.extend({
 	id = el.find("#coid-bodega").val();
 	
 	if(id !== ""){
-	    model = this.collection.get({"id":String(id)});
-	    if (model !== undefined){
-		el.find("#bodegaProducto").html(model.get("name"));
-	    }else{
-		el.find("#bodegaProducto").html("Este codigo no existe");
-	    }
+	    var model = new productoModel({id: id});
+	    fetchAndDisplayProduct(model, el, false);
 	}else{
-            el.find("#bodegaProducto").html("");
+            el.find("#productoName").html("Ponga un codigo para buscar");                
 	}
     },
     insertMercanciaBodega: function () {
@@ -30,7 +26,6 @@ var mercanciaBodegaView = Backbone.View.extend({
 	mercancia.save({}, {	    
 	    success: function (model, response) {            
 		if(response === 0){	                    
-		    //el.find("#bodegaResponse").html("Producto Insertado Correctamente");
 		    alert("Producto Insertado Correctamente");
 		}else{
 		    if(response === 1452){
