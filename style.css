@@ -43,10 +43,9 @@ body{
 display:none;
 }
 
-
-
-
-
+.p-10{
+    padding:10px;
+}
 
 /*######## Smart Green ########*/
 .form {

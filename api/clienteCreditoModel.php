@@ -21,14 +21,12 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PU
     }
 
     if(is_numeric($celular) == false){
-      echo "Solo se permiten numeros para el celular, no letras o symbolos.";
+      echo "Solo se permiten numeros para el celular, no letras o symbolos, o espacios en blanco";
       return;
     }
 
     $db = openDB();
-
     $results = insertarClienteCredito($db, $cedula, $name, $celular);
-    
     closeDB($db);
     echo $results;
 }
