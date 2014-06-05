@@ -297,15 +297,15 @@ function getProductoCollection($con)
         }
   }
 
-  function updateOrCreateProducto($con, $id, $name)
+  function updateOrCreateProducto($con, $id, $name, $size)
   {
     if(is_numeric($id) == false){
       return 0;
     }
 
-    if($stmt = $con->prepare ("INSERT INTO Productos (id, name) values (?, ?) ON DUPLICATE KEY UPDATE name=?")){
+    if($stmt = $con->prepare ("INSERT INTO Productos (id, name, size) values (?, ?, ?) ON DUPLICATE KEY UPDATE name=?, size=?")){
 
-      if (!$stmt->bind_param("sss", $id, $name, $name)){
+      if (!$stmt->bind_param("sssss", $id, $name, $size, $name, $size)){
          echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
           $response = "0";    
           return $response;     

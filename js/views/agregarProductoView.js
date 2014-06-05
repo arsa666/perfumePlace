@@ -9,14 +9,14 @@ var agregarProductoView = Backbone.View.extend({
         el = this.$el;
         id = el.find("#agregarCOD").val();
 
-        if (id !== '' && id.length > 6) {
+        if (id !== '' && id.length > 3) {
             addDisabled(el.find('#agregar-submit'));
             var model = new productoModel({id: id});
 
             model.fetch({
                 success: function (m) {
                     if(!_.isNull(m.get('name'))){//if exist.
-                        var x = confirm('Producto registrado con codigo: ' + id + ' . Desea modificarlo?');
+                        var x = confirm('Producto registrado con codigo: ' + id + ' y nombre: ' + m.get('name') + '. Desea modificarlo?');
                         if (x) {
                             Backbone.history.navigate('#/modificar');
                         } else {
@@ -34,8 +34,9 @@ var agregarProductoView = Backbone.View.extend({
         var el = this.$el;
         var id = el.find('input[name="id"]').val();
         var name = el.find('input[name="name"]').val();
+        var tamano = el.find('input[name="tamano"]').val();
 
-	    var producto = new productoModel({id:id, name:name});
+	    var producto = new productoModel({id:id, name:name, size: tamano});
         producto.save({}, {
         success: function (model, response) {
             if(response == "1"){

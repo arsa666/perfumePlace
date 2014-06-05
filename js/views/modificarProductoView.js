@@ -28,15 +28,21 @@ var modificarProductoView = Backbone.View.extend({
 	    idVal = el.find("#modificarId").val();
 
 	    if(idVal !== ""){
-			model = this.collection.get({"id":String(idVal)});
-			if(model != undefined){
-			    self.model = model;
-			    el.find("input[name='name']").val(model.get("name"));
-			} else {
-	    		self.model = undefined;
-			    el.find("input[name='name']").val("No existe este producto");
-			}
-	    } else {
+			model = new productoModel({id: idVal});
+			model.fetch({
+                success: function (m) {
+                	if(!_.isNull(m.get('name'))){//if exist.
+                		self.model = m;
+			    		el.find("input[name='name']").val(m.get("name"));
+                	}else {
+	    				self.model = undefined;
+			    		el.find("input[name='name']").val("No existe este producto");
+					}
+                }
+            });
+
+
+	   } else {
 	    	self.model = undefined;
 			el.find("input[name='name']").val("");
 	    }

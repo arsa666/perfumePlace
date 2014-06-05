@@ -1,4 +1,31 @@
-1) Make sure cliente credito is registered before doing a sell.
+*Modificar producto no carga el tamano
+*Modificar producto no graba tamano
+*Borrar form input cuando se grabo ya el producto en la pagina de agregar productos. 
+*Cliente credito cuando no pones celular en blanco el te tira error de no letra o symbolo. 
+*buscar referencia change the way it looks for a model instead of using the collection
+*Ingresar a la sala de venta fix error de ingresar falta un espacio despues de tranferido 9piezas.
+*ingresar a la sala de ventas falta que fetch el model y no collection.
+*ingresa a la sala de venta falta que salga el tamano.
+*Ingresar a bodega no carga del modelo sino del collection.
+*Ventas cambiar el fetch a modelo y no collection.
+*hacer q los forms se vean mas bonitos.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////FUTURE TASK/////////////////////
 2) Send email at the end of the day report.
 3) Send email when inserting into bodega.
 4) gastos table 

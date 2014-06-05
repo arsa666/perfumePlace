@@ -6,16 +6,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
 	$data = json_decode(file_get_contents('php://input'));
 	$id = $data->{'id'};
 	$name = $data->{'name'};
-
+    $size = $data->{'size'};
+    
 	//sanitation checks
-    if(ctype_alnum($id) == false || $name != ''){
+    if(ctype_alnum($id) == false || $name == ''){
       echo "Solo se permite numeros o letras en el codigo de barra, y no espacio en blanco";
       return;
     }
 
  	$db = openDB();
 
- 	$results = updateOrCreateProducto($db, $id, $name);
+ 	$results = updateOrCreateProducto($db, $id, $name, $size);
  	
  	closeDB($db);
 
