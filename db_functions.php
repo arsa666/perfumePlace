@@ -23,6 +23,7 @@ function getTotalAvailable($con, $table, $id){
    }
  }
 
+//substract inventory from table of mercanciAfuera and mercanciaBodega
  function minusInventory($con, $table, $id, $quantity){
         $totalAvaialable =  getTotalAvailable($con, $table, $id);
         $total = $totalAvaialable - $quantity;
@@ -45,11 +46,29 @@ function getTotalAvailable($con, $table, $id){
         }
  }
 
-  function plusInventory($con, $table, $id, $quantity){
-        $totalAvaialable =  getTotalAvailable($con, $table, $id);
-        $total = $totalAvaialable + $quantity;
-         if($stmt = $con->prepare ("INSERT INTO $table (id, cantidad) values (?,?) ON DUPLICATE KEY UPDATE cantidad=?")){
-                    if (!$stmt->bind_param("sii", $id,$total, $total)){
+ function getNameOfProduct($con, $id){
+      if($stmt = $con->prepare("SELECT name FROM Productos where id=?"))
+      { 
+        $id = (string)$id;
+        if (!$stmt->bind_param("s", $id)){
+          echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+         
+        }
+        $stmt->execute();
+          /* Bind results */
+        $stmt->bind_result($name);
+        /* Fetch the value */
+        $stmt->fetch();
+        $stmt->close();
+        return $name;
+      }
+ }
+
+
+//insert into register table of either bodega or fuera. 
+function plusRegisterInventory($con, $table, $id, $quantity,$precio, $lugar, $name) {
+    if($stmt = $con->prepare ("INSERT INTO $table (id, name, cantidad, precio, lugar) values (?, ?, ?, ?, ?)")){
+                    if (!$stmt->bind_param("ssids", $id, $name, $quantity, $precio, $lugar)){
                         $response = mysqli_stmt_errno($stmt);
                          return $response;
                     }
@@ -59,38 +78,93 @@ function getTotalAvailable($con, $table, $id){
                       return $response;   
                     }
                     $stmt->close(); 
-                    $response = 0;                   
-                    return $response;
+                    $response = 0;
+                    return $response;            
+        }else{
+            $response = mysqli_stmt_errno($stmt);
+            return $response;
+        }
+}
+
+
+function plusInventory($con, $table, $id, $quantity,$precio, $lugar){
+        $totalAvaialable =  getTotalAvailable($con, $table, $id);
+        $total = $totalAvaialable + $quantity;
+        $name = getNameOfProduct($con, $id);
+        if($stmt = $con->prepare ("INSERT INTO $table (id, name, cantidad, precio, lugar) values (?,?,?,?,?) ON DUPLICATE KEY UPDATE name=? ,cantidad=?, precio=?, lugar=?")){
+                    if (!$stmt->bind_param("ssidssids", $id, $name, $total,$precio, $lugar, $name, $total, $precio, $lugar)){
+                        $response = mysqli_stmt_errno($stmt);
+                         return $response;
+                    }
+                    
+                    if (!$stmt->execute()) {
+                      $response = mysqli_stmt_errno($stmt);
+                      return $response;   
+                    }
+                    $stmt->close(); 
+                    $response = 0;
+
+                    if ($response == 0) {
+                        $table = "Registro". $table;
+                        $response = plusRegisterInventory($con, $table, $id, $quantity, $precio, $lugar, $name);
+                        return $response;
+                    }                 
         }else{
             $response = mysqli_stmt_errno($stmt);
             return $response;
         }
  }
 
+ function getPrecioLugarBodega($con, $id) {
+    if($stmt = $con->prepare("SELECT precio, lugar FROM MercanciaBodega where id=?"))
+      { 
+        $id = (string)$id;
+        if (!$stmt->bind_param("s", $id)){
+          echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+         
+        }
+        $stmt->execute();
+          /* Bind results */
+        $stmt->bind_result($precio, $lugar);
+        /* Fetch the value */
+        $stmt->fetch();
+        $stmt->close();
+        $json = array();
+        $json['precio'] = $precio;   
+        $json['lugar'] = $lugar;
+        return $json;
+      }
+ }
+
 
 function insertMercanciaAfuera($con, $id, $cantidad){
   $id = $id;
   $cantidad = (int)$cantidad;
+  $precio = floatval($precio);
+
   
   if(is_numeric($id) === false){
       return 0;
     }
 
     $cantidadActual = 0;
-    $cantidadActual = getTotalAvailable($con, "MercanciaBodega", $id);
+    $cantidadActual = getTotalAvailable($con, "MercanciaBodega", $id);//get total from bodega
     if($cantidadActual == 0){
         return -1;     
     }else{
-      $total = $cantidadActual - $cantidad;
+      $total = $cantidadActual - $cantidad;//if amount wanted is possible. 
       if($total >= 0){
             $insertedCorrectly = false;
-            $insertedCorrectly =  minusInventory($con, "MercanciaBodega", $id, $cantidad);
+            $insertedCorrectly =  minusInventory($con, "MercanciaBodega", $id, $cantidad);//substract from bodega.
 
-            if($insertedCorrectly === 0){
+            if($insertedCorrectly === 0){ //if correctly substracted from bodega then add to sala de venta.
               $cantidadActual = 0;                
-              $cantidadActual = getTotalAvailable($con, "MercanciaAfuera", $id);    
-              $checkInsertion = plusInventory($con, "MercanciaAfuera", $id, $cantidad);             
-                return $checkInsertion;             
+              $cantidadActual = getTotalAvailable($con, "MercanciaAfuera", $id);
+              $getPrecioLugarBodega = getPrecioLugarBodega($con, $id);
+              $precio = $getPrecioLugarBodega['precio'];
+              $lugar = $getPrecioLugarBodega['lugar'];
+              $checkInsertion = plusInventory($con, "MercanciaAfuera", $id, $cantidad, $precio, $lugar);
+              return $checkInsertion;             
             }
             return $insertedCorrectly;
       }else{
@@ -99,15 +173,16 @@ function insertMercanciaAfuera($con, $id, $cantidad){
     }
 }
 
-function insertMercanciaBodega($con, $id, $name, $cantidad){
+function insertMercanciaBodega($con, $id, $cantidad, $precio, $lugar){
   $id = $id;
   $cantidad = (int)$cantidad;
+  $precio = floatval($precio);
   
   if(is_numeric($id) === false){
       return 0;
     }
 
-    $checkInsertion = plusInventory($con, "MercanciaBodega", $id, $cantidad); 
+    $checkInsertion = plusInventory($con, "MercanciaBodega", $id, $cantidad, $precio, $lugar); 
     return $checkInsertion;
 }
 
@@ -138,11 +213,12 @@ function checkClienteCredito($con, $cedula) {
   }
 }
 
-function ventaRegistrar($con, $coid, $nombre ,$precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen){
+function ventaRegistrar($con, $coid,$precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen){
   
   $precioVenta = floatval($precioVenta);
   $cantidad = intval($cantidad);
   $total = floatval($total);
+  $nombre = getNameOfProduct($con, $coid);
 
   if(is_numeric($coid) == false){
       return 0;

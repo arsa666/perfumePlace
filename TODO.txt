@@ -8,6 +8,10 @@ ingresar a la sala de ventas falta que fetch el model y no collection.
 ingresa a la sala de venta falta que salga el tamano.
 Ingresar a bodega no carga del modelo sino del collection.
 
+
+*mercaiaBodega input from dodne vino y precio de costo. 
+*fecha en ingrasar bodega.
+*fecha para sacar a la sala de venta.
 *Ventas cambiar el fetch a modelo y no collection.
 *hacer q los forms se vean mas bonitos.
 

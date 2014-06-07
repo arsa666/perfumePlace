@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
 	//sanitation checks
  	$db = openDB();
 
- 	$results = ventaRegistrar($db, $coid, $nombre ,$precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen);
+ 	$results = ventaRegistrar($db, $coid,$precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen);
  	
  	closeDB($db);
 

@@ -19,7 +19,7 @@ function closeView(view){
 
 	delete view.$el; // Delete the jQuery wrapped object variable
 	delete view.el; // Delete the variable reference to view node
-	
+
     }
 }
 
@@ -48,6 +48,10 @@ function alertError(response){
             msg = msg + ' Ya esta registrado' ;
         }
 
+        if (response == '1452') {
+            msg = msg + ' Foreign Key Constraint' ;
+        }
+
         if (response.responseText !== undefined) {
             msg = msg + "Response text: " +response.responseText;
         }
@@ -59,7 +63,7 @@ function alertError(response){
 function fetchAndDisplayProduct(model, el, val){
     val = val || false;
     model.fetch({
-	success: function (m) {	
+	success: function (m) {
 	    if(!_.isNull(m.get('name'))){//if exist because name is not null always
 		if (val === false) {
 		    el.find("#productoName").html(m.escape("name"));

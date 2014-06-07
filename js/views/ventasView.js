@@ -13,19 +13,19 @@ var ventasView = Backbone.View.extend({
 	e.preventDefault();
 	e.stopPropagation();
 	var el = this.$el;
-	
+
 	var cod = el.find("#ventasCod").val();
-	var nombre = el.find("#ventasNombre").text();
+	var nombre = el.find("#productoName").text();
 	var precio = el.find("#ventasPrecio").val();
 	var cantidad = el.find("#ventasCantidad").val();
 	var categoria = el.find("[name=ventaCategory]:checked").val();
 	var ventaPago = el.find("[name=ventaPago]:checked").val();
 	var otroAlmacen = el.find("input[name='nombreAlmacen']").val();
 	var cedulaCliente = '';
-	
+
 	if(ventaPago === "Credito"){
 	    cedulaCliente = el.find("#cedulaCliente").val();
-	    
+
 	    if(cedulaCliente === ""){
 		alert('No puede dejar la cedula del cliente en blanco en venta de Credito');
 		return;
@@ -33,23 +33,23 @@ var ventasView = Backbone.View.extend({
 	}
 	if(ventaPago === "OtroAlmacen"){
 	    nombreAlmacen = el.find("input[name='nombreAlmacen']").val();
-	    
+
 	    if(nombreAlmacen === ""){
 		alert('No puede dejar el nombre del almacen al que le transfirio el perfume en blanco, ingrese un nombre');
 		return;
 	    }
 	}
-	
+
 	var total = el.find("#ventasTotal").val();
-	
+
 	if(cod === "" || nombre ==="" || precio === "" || cantidad === "" || categoria === ""
 	   || total === ""){
 	    alert('No puede dejar espacios en blanco');
 	    return;
 	}
-	
+
 	var ventas = new ventasModel({coid:cod, nombre:nombre, precioVenta:precio, cantidad:cantidad, tipoVenta:categoria, cedulaCliente: cedulaCliente, total:total, formaPago: ventaPago, otroAlmacen: otroAlmacen });
-	
+
 	ventas.save({}, {
 	    success: function (model, response) {
 	            if(response === 0){
@@ -59,7 +59,7 @@ var ventasView = Backbone.View.extend({
 	                //el.find("#ultimaVenta").html(ultimaVenta.render().el);
 	            }else if (response === 10){
 	            	alert('"Cliente con cedula: ' + cedulaCliente + ' no existe, porfavor registre el cliente en la seccion de registrar cliente. "');
-			
+
 	            }else{
 	            	alert('Solo quedan: ' +response+ ' piezas en la sala de venta con codigo de barra: ' +model.coid);
 	            }
@@ -70,13 +70,13 @@ var ventasView = Backbone.View.extend({
 	});
     },
     toggleOptions: function () {
-	
+
 	var el  = this.$el;
 	var val = el.find("[name=ventaPago]:checked").val();
 	if(val === "Credito"){
 	    el.find(".credito").show();
 	    el.find("#nombreAlmacen").hide();
-	    
+
 	}else if(val === "OtroAlmacen"){
 	    el.find(".credito").hide();
 	    el.find(":radio[value='B']").click();
@@ -92,24 +92,24 @@ var ventasView = Backbone.View.extend({
 	var cantidad = el.find("#ventasCantidad").val();
 	var tipoVenta = el.find('input:radio[name=ventaCategory]:checked').val();
 	var ventasTotal = el.find('#ventasTotal');
-	
+
 	var total = precio * cantidad;
 	if(tipoVenta === "A"){
 	    total = (total * 0.07) + total;
 	}
-	
+
 	ventasTotal.val(total);
     },
     loadCliente: function () {
 	self = this;
 	el = this.$el;
-	
+
 	id = el.find("#cedulaCliente").val();
-	
+
 	if(id !== ""){
 	    model = App.clientesCredito.where({"cedula":String(id)});
 	    if (model !== undefined && model.length > 0){
-		
+
 		el.find("#ventasCliente").html(model.nombre);
 		el.find("#numeroCliente").html(model.celular);
 		debugger;
@@ -126,12 +126,12 @@ var ventasView = Backbone.View.extend({
 	el = this.$el;
 
 	id = el.find("#ventasCod").val();
-	
+
 	if(id !== ""){
 	    var model = new productoModel({id: id});
 	    fetchAndDisplayProduct(model, el, false);
 	}else{
-            el.find("#productoName").html("Ponga un codigo para buscar");                
+            el.find("#productoName").html("Ponga un codigo para buscar");
 	}
     },
     render:function() {
@@ -140,13 +140,13 @@ var ventasView = Backbone.View.extend({
 	var month = d.getMonth() + 1;
 	var day = d.getDate();
 	var year = d.getFullYear();
-	
+
     	$.get('js/templates/ventasViewTemplate.html', function (data) {
 	    template = _.template($(data).html(), {month:month, day:day, year:year});
             self.$el.html(template).hide().fadeIn("slow");
         }, 'html');
-	
-	
+
+
         return this;
     }
 });
