@@ -20,7 +20,6 @@ Ventas cambiar el fetch a modelo y no collection.
 *menu para modificar total de productos en la bodega y registar hora de cambio y alertar por email o algo asi (AUTHENTICATION)
 *Modificar cantidad total en sala de venta y registar hora de cambio y alertar por email o algo asi. (AUTHENTICATION)
 * buscar referencia te tira el costo ultimo de bodega.
-* 
 
 
 
