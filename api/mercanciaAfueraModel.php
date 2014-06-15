@@ -6,7 +6,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
 	$data = json_decode(file_get_contents('php://input'));
 	$id = $data->{'id'};
 	$cantidad = $data->{'cantidad'};
-
 	//sanitation checks
  	//sanitationchecks
 	if(ctype_alnum($id) == false){
@@ -22,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
 	$db = openDB();
 	
 
- 	$results = insertMercanciaAfuera($db, $id,$cantidad);
+ 	$results = insertMercanciaAfuera($db, $id, $cantidad, $precio, $lugar);
  	
  	closeDB($db);
  	echo $results;

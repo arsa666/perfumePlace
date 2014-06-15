@@ -1,4 +1,43 @@
-1) Make sure cliente credito is registered before doing a sell.
+Modificar producto no carga el tamano
+Modificar producto no graba tamano
+Borrar form input cuando se grabo ya el producto en la pagina de agregar productos. 
+Cliente credito cuando no pones celular en blanco el te tira error de no letra o symbolo. 
+buscar referencia change the way it looks for a model instead of using the collection
+Ingresar a la sala de venta fix error de ingresar falta un espacio despues de tranferido 9piezas.
+ingresar a la sala de ventas falta que fetch el model y no collection.
+ingresa a la sala de venta falta que salga el tamano.
+Ingresar a bodega no carga del modelo sino del collection.
+mercaiaBodega input from dodne vino y precio de costo. 
+fecha en ingrasar bodega.
+fecha para sacar a la sala de venta.
+Ventas cambiar el fetch a modelo y no collection.
+
+
+
+*agregar DB al digital y apuntar el servidor para alla y ver el lag, y hostear la pagina alla tambien. 
+*cambiar logica de ventas para que siempre apunte el cliente pero que sea obligatorio si es credito. 
+*hacer q los forms se vean mas bonitos.
+*menu para modificar total de productos en la bodega y registar hora de cambio y alertar por email o algo asi (AUTHENTICATION)
+*Modificar cantidad total en sala de venta y registar hora de cambio y alertar por email o algo asi. (AUTHENTICATION)
+* buscar referencia te tira el costo ultimo de bodega.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////FUTURE TASK/////////////////////
 2) Send email at the end of the day report.
 3) Send email when inserting into bodega.
 4) gastos table 

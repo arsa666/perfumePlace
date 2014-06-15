@@ -9,39 +9,44 @@ var agregarProductoView = Backbone.View.extend({
         el = this.$el;
         id = el.find("#agregarCOD").val();
 
-        if (id !== "") {
-            model = this.collection.get({"id":String(id)});
-            if (model !== undefined){
-                el.find("#agregarDetails").val(model.get("name"));
-            }else{
-                el.find("#agregarDetails").val("");
-            }
-        }else{
-                el.find("#agregarDetails").val("");
+        if (id !== '' && id.length > 3) {
+            addDisabled(el.find('#agregar-submit'));
+            var model = new productoModel({id: id});
+
+            model.fetch({
+                success: function (m) {
+                    if(!_.isNull(m.get('name'))){//if exist.
+                        var x = confirm('Producto registrado con codigo: ' + id + ' y nombre: ' + m.get('name') + '. Desea modificarlo?');
+                        if (x) {
+                            Backbone.history.navigate('#/modificar');
+                        } else {
+                            addDisabled(el.find('#agregar-submit'));
+                        }
+                    } else {
+                        removeDisabled(el.find('#agregar-submit'));
+                    }
+                }
+            });
         }
     },
     submitForm: function(event){
-        event.preventDefault();
+        stop(event);
         var el = this.$el;
         var id = el.find('input[name="id"]').val();
         var name = el.find('input[name="name"]').val();
-        model = this.collection.get({"id":String(id)});
+        var tamano = el.find('input[name="tamano"]').val();
 
-        if(model !== undefined){
-            alert('Este producto ya esta registrado con el codigo de barra: ' + id);
-            return;
-        }
-
-	var producto = new productoModel({id:id, name:name});
+	    var producto = new productoModel({id:id, name:name, size: tamano});
         producto.save({}, {
         success: function (model, response) {
             if(response == "1"){
+                el.find('form').trigger('reset');
                 App.productos.add(model);
                 alert("Se ha agregado el producto a la base de datos");
             }
         },
         error: function (model, response) {
-            alert('Error: ' + response.responseText);
+            alertError(response);
         }
 });
     },

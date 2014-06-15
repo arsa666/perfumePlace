@@ -43,10 +43,9 @@ body{
 display:none;
 }
 
-
-
-
-
+.p-10{
+    padding:10px;
+}
 
 /*######## Smart Green ########*/
 .form {
@@ -150,7 +149,6 @@ display:none;
 
 .form table{
     padding:15px;
-    width:60%;
 }
 
 .caja{
@@ -235,7 +233,20 @@ top:1px;
 
 
 .active, .active:hover{
+<<<<<<< HEAD
     border:solid white 5px;
     color: red;    
+=======
+    border:solid #9DC45F 5px;
+    
+    top:1px;
+>>>>>>> other_branch
 }
 
+.disabled{
+    background-color: grey;
+}
+
+.wait{
+    cursor:wait;
+}
