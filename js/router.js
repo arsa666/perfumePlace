@@ -10,10 +10,10 @@ window.App = {};
 var MessageRouter = Backbone.Router.extend({
     initialize:function(){
         App.productos = new productoCollection();
-        App.clientesCredito = new clienteCollection();
+        // App.clientesCredito = new clienteCollection();
 
 
-        App.clientesCredito.fetch();
+        // App.clientesCredito.fetch();
         //App.views = new Array();
         App.currentView;
         $('#main').empty();

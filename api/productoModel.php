@@ -23,14 +23,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
  	echo $results;
 
 }elseif($_SERVER['REQUEST_METHOD'] === 'GET'){
+    $id = $_GET["id"];
+	 if(ctype_alnum($id) != false){
+        $db = openDB();
 
-	$db = openDB();
+     	$results = getProducto($db, $id);
+     	
+     	closeDB($db);
 
- 	$results = getProducto($db, $_GET["id"]);
- 	
- 	closeDB($db);
-
- 	echo $results;
+     	echo $results;
+    }
 }
 
 

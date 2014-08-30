@@ -14,11 +14,12 @@ Ventas cambiar el fetch a modelo y no collection.
 
 
 
-*agregar DB al digital y apuntar el servidor para alla y ver el lag, y hostear la pagina alla tambien. 
-*cambiar logica de ventas para que siempre apunte el cliente pero que sea obligatorio si es credito. 
-*hacer q los forms se vean mas bonitos.
-*menu para modificar total de productos en la bodega y registar hora de cambio y alertar por email o algo asi (AUTHENTICATION)
-*Modificar cantidad total en sala de venta y registar hora de cambio y alertar por email o algo asi. (AUTHENTICATION)
+agregar DB al digital y apuntar el servidor para alla y ver el lag, y hostear la pagina alla tambien. 
+cambiar logica de ventas para que siempre apunte el cliente pero que sea obligatorio si es credito. 
+
+* hacer q los forms se vean mas bonitos.
+* menu para modificar total de productos en la bodega y registar hora de cambio y alertar por email o algo asi (AUTHENTICATION)
+* Modificar cantidad total en sala de venta y registar hora de cambio y alertar por email o algo asi. (AUTHENTICATION)
 * buscar referencia te tira el costo ultimo de bodega.
 * 
 

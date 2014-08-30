@@ -73,12 +73,37 @@ function fetchAndDisplayProduct(model, el, val){
 		    el.find("#productoSize").val(m.escape("size"));
 		}
 	    } else {
-		el.find("#productoName").html("No existe este producto");
-		el.find("#productoSize").html("");
+		   el.find("#productoName").html("No existe este producto, <a href='#/agregar'>desea registrarlo?</a>");
+		   el.find("#productoSize").html("");
 	    }
 	}
     });
 }
+
+function fetchAndDisplayCliente(model, el, val){
+    val = val || false;
+    model.fetch({
+    success: function (m) {
+        debugger;
+        if(!_.isNull(m.get('nombre'))){//if exist because name is not null always
+            if (val === false) {
+                debugger;
+                el.find("#cedulaCliente").val(m.escape("id"));
+                el.find("#ventasCliente").html(m.escape("nombre"));
+                el.find("#numeroCliente").html(m.escape("celular"));
+            } else{
+                el.find("#cedulaCliente").val(m.escape("id"));
+                el.find("#ventasCliente").val(m.escape("nombre"));
+                el.find("#numeroCliente").val(m.escape("celular"));
+            }
+        } else {
+           el.find("#ventasCliente").html("No existe este cliente, <a href='#/clienteCredito'>desea registrarlo?</a>");
+           el.find("#numeroCliente").html("");
+        }
+    }
+    });
+}
+
 
 
 function C(msg){

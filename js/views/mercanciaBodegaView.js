@@ -15,7 +15,9 @@ var mercanciaBodegaView = Backbone.View.extend({
                 el.find("#productoName").html("Ponga un codigo para buscar");
     	}
     },
-    insertMercanciaBodega: function () {
+    insertMercanciaBodega: function (e) {
+        e.preventDefault();
+        e.stopPropagation();
     	var self = this;
     	var el = this.$el;
 
@@ -28,16 +30,17 @@ var mercanciaBodegaView = Backbone.View.extend({
     	var mercancia = new mercanciaBodegaModel({id:id, cantidad:cantidad, precio: precio, lugar: lugar});
     	mercancia.save({}, {
     	    success: function (model, response) {
-    		if(response === 0){
-    		    alert("Producto Insertado Correctamente");
-    		}else{
-    		    if(response === 1452){
-    			var r = confirm('Este producto no existe en el inventario, desea agregarlo? ');
-    			if (r === true){
-    			    window.location.href='#/agregar';
-    			}
-    		    }
-    		}
+        		if (response === 0) {
+                    el.find('form').trigger('reset');
+        		    alert("Producto Insertado Correctamente");
+        		} else {
+        		    if(response === 1452){
+            			var r = confirm('Este producto no existe en el inventario, desea agregarlo? ');
+            			if (r === true){
+            			    window.location.href='#/agregar';
+            			}
+        		    }
+        		}
     	    },
     	    error: function (model, response) {
     		alert('Error: ' + response.responseText);

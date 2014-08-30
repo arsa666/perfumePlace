@@ -91,6 +91,9 @@ function plusInventory($con, $table, $id, $quantity,$precio, $lugar){
         $totalAvaialable =  getTotalAvailable($con, $table, $id);
         $total = $totalAvaialable + $quantity;
         $name = getNameOfProduct($con, $id);
+        if ($name === null) {
+          return "Este Producto no esta registrado, porfavor registre el producto y luego ingrese a la bodega.";
+        }
         if($stmt = $con->prepare ("INSERT INTO $table (id, name, cantidad, precio, lugar) values (?,?,?,?,?) ON DUPLICATE KEY UPDATE name=? ,cantidad=?, precio=?, lugar=?")){
                     if (!$stmt->bind_param("ssidssids", $id, $name, $total,$precio, $lugar, $name, $total, $precio, $lugar)){
                         $response = mysqli_stmt_errno($stmt);
@@ -349,6 +352,31 @@ function getProductoCollection($con)
         $json['id'] = $id;
         $json['name'] = $name;
         $json['size'] = $size;
+
+        return json_encode($json);
+      }
+  }
+
+  function getCliente($con, $id)
+  { 
+    if($stmt = $con->prepare("SELECT * FROM ClienteCredito where id=?"))
+      { 
+        $id = (string)$id;
+        if (!$stmt->bind_param("s", $id)){
+          echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+         
+        }
+        $stmt->execute();
+          /* Bind results */
+        $stmt->bind_result($id, $nombre, $celular);
+        /* Fetch the value */
+        $stmt->fetch();
+        $stmt->close();
+        $json = array();
+
+        $json['id'] = $id;
+        $json['nombre'] = $nombre;
+        $json['celular'] = $celular;
 
         return json_encode($json);
       }

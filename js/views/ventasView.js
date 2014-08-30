@@ -54,6 +54,12 @@ var ventasView = Backbone.View.extend({
 	    success: function (model, response) {
 	            if(response === 0){
 	            	el.find('form').trigger('reset');
+	            	el.find('#productoName').html('');
+	            	el.find('#productoSize').html('');
+	            	el.find('#ventasCliente').html('');
+	            	el.find('#numeroCliente').html('');
+
+
 	            	alert('Venta Registrada Correctamente');
 	            	//var ultimaVenta = new ultimaVentaView({model:model});
 	                //el.find("#ultimaVenta").html(ultimaVenta.render().el);
@@ -71,68 +77,58 @@ var ventasView = Backbone.View.extend({
     },
     toggleOptions: function () {
 
-	var el  = this.$el;
-	var val = el.find("[name=ventaPago]:checked").val();
-	if(val === "Credito"){
-	    el.find(".credito").show();
-	    el.find("#nombreAlmacen").hide();
+		var el  = this.$el;
+		var val = el.find("[name=ventaPago]:checked").val();
+		if(val === "Credito"){
+		    el.find(".credito").show();
+		    el.find("#nombreAlmacen").hide();
 
-	}else if(val === "OtroAlmacen"){
-	    el.find(".credito").hide();
-	    el.find(":radio[value='B']").click();
-	    el.find("#nombreAlmacen").show();
-	}else{
-	    el.find(".credito").hide();
-			el.find("#nombreAlmacen").hide();
-	}
-    },
-    loadTotal: function () {
-	el = this.$el;
-	var precio = el.find("#ventasPrecio").val();
-	var cantidad = el.find("#ventasCantidad").val();
-	var tipoVenta = el.find('input:radio[name=ventaCategory]:checked').val();
-	var ventasTotal = el.find('#ventasTotal');
+		}else if(val === "OtroAlmacen"){
+		    el.find(".credito").hide();
+		    el.find(":radio[value='B']").click();
+		    el.find("#nombreAlmacen").show();
+		}else{
+		    el.find(".credito").hide();
+				el.find("#nombreAlmacen").hide();
+		}
+	    },
+	    loadTotal: function () {
+		el = this.$el;
+		var precio = el.find("#ventasPrecio").val();
+		var cantidad = el.find("#ventasCantidad").val();
+		var tipoVenta = el.find('input:radio[name=ventaCategory]:checked').val();
+		var ventasTotal = el.find('#ventasTotal');
 
-	var total = precio * cantidad;
-	if(tipoVenta === "A"){
-	    total = (total * 0.07) + total;
-	}
+		var total = precio * cantidad;
+		if(tipoVenta === "A"){
+		    total = (total * 0.07) + total;
+		}
 
-	ventasTotal.val(total);
+		ventasTotal.val(total);
     },
     loadCliente: function () {
-	self = this;
-	el = this.$el;
+		self = this;
+		el = this.$el;
+		id = el.find("#cedulaCliente").val().toLowerCase();
 
-	id = el.find("#cedulaCliente").val();
-
-	if(id !== ""){
-	    model = App.clientesCredito.where({"cedula":String(id)});
-	    if (model !== undefined && model.length > 0){
-
-		el.find("#ventasCliente").html(model.nombre);
-		el.find("#numeroCliente").html(model.celular);
-		debugger;
-			}else{
-			    el.find("#ventasCliente").html("Este Cliente no existe");
-			}
-	}else{
-            el.find("#ventasCliente").html("");
-	    el.find("#numeroCliente").html("");
-	}
+		if(id !== ""){
+		    var model = new clienteCreditoModel({id:id});
+			fetchAndDisplayCliente(model, el, false);
+		}else{
+	        el.find("#ventasCliente").html("");
+		    el.find("#numeroCliente").html("");
+		}
     },
     loadName: function (){
 	    self = this;
-	el = this.$el;
-
-	id = el.find("#ventasCod").val();
-
-	if(id !== ""){
-	    var model = new productoModel({id: id});
-	    fetchAndDisplayProduct(model, el, false);
-	}else{
-            el.find("#productoName").html("Ponga un codigo para buscar");
-	}
+		el = this.$el;
+		id = el.find("#ventasCod").val();
+		if(id !== ""){
+		    var model = new productoModel({id: id});
+		    fetchAndDisplayProduct(model, el, false);
+		}else{
+	            el.find("#productoName").html("Ponga un codigo para buscar");
+		}
     },
     render:function() {
 	self = this;

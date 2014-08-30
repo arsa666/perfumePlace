@@ -6,12 +6,15 @@
 <table border="0" class="ventas-tabla">
 <tr><td style="width:30px"><label>Codigo de Barra</label></td><td style="width:500px;"><input type="text" id="ventasCod" /></td></tr>
 
+<tr><td>Producto Nombre: </td><td><span id="productoName"></span></td></tr>
+<tr><td>Producto Tamano: </td><td><span id="productoSize"></span></td></tr>
+
 <tr><td><label>Precio de Venta</label></td><td><input type="text" id="ventasPrecio" /></td></tr>
 
 <tr><td><label>Cantidad</label></td><td><input type="text" id="ventasCantidad" value="1" /></td></tr>
 
-<tr><td><label>Tipo de venta</label></td><td> <input type = "radio" name ="ventaCategory" value = "A" checked = "checked" />Tipo A <BR/>
-<input type = "radio" name ="ventaCategory" value = "B"  />Tipo B </td></tr>
+<tr><td><label>Tipo de venta</label></td><td> <input type = "radio" name ="ventaCategory" value = "A" checked = "checked" />Tipo A (%7)<BR/>
+<input type = "radio" name ="ventaCategory" value = "B"  />Tipo B (Al Mayor) </td></tr>
 
 <tr><td><label>Forma de Pago</label></td><td id="#formaPago"> 
     <input type = "radio" name ="ventaPago" value="TarjetaCredito"/> Tarjeta de Credito (Master Card, VISA)<BR/>
@@ -30,8 +33,6 @@
 <tr class="credito" style="display:none"><td><label>NOMBRE del Cliente</label></td><td><div id="ventasCliente"></div></td></tr>
 <tr class="credito" style="display:none"><td><label>Telefono del Cliente</label></td><td><div id="numeroCliente"></div></td></tr>
 
-<tr><td>Producto Nombre: </td><td><span id="productoName"></span></td></tr>
-<tr><td>Producto Tamano: </td><td><span id="productoSize"></span></td></tr>
 
 <tr><td><label>Total</label></td><td><input type="text" id="ventasTotal" /></td></tr>
 

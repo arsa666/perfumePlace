@@ -9,14 +9,14 @@ var agregarProductoView = Backbone.View.extend({
         el = this.$el;
         id = el.find("#agregarCOD").val();
 
-        if (id !== '' && id.length > 3) {
+        if (id !== '' && id.length >= 2 ) {
             addDisabled(el.find('#agregar-submit'));
             var model = new productoModel({id: id});
 
             model.fetch({
                 success: function (m) {
                     if(!_.isNull(m.get('name'))){//if exist.
-                        var x = confirm('Producto registrado con codigo: ' + id + ' y nombre: ' + m.get('name') + '. Desea modificarlo?');
+                        var x = confirm('Producto ya registrado con codigo: ' + id + ' y nombre: ' + m.get('name') + '. Desea modificarlo?');
                         if (x) {
                             Backbone.history.navigate('#/modificar');
                         } else {
