@@ -1,0 +1,40 @@
+<script type='text/template'>
+
+<div class="form">
+<h1>Revisar Entrada de Bodega</h1>
+<div>
+Año:<BR/>
+<input type="text" name="year" id="entrada-year" /><BR/>
+Mes: <BR/>
+<select name='mes' id='entrada-mes'>
+<option value='01'>Enero</option>
+<option value='02'>Febrero</option>
+<option value='03'>Marzo</option>
+<option value='04'>April</option>
+<option value='05'>Mayo</option>
+<option value='06'>Junio</option>
+<option value='07'>Julio</option>
+<option value='08'>Agosto</option>
+<option value='09'>Septiembre</option>
+<option value='10'>Octubre</option>
+<option value='11'>Noviembre</option>
+<option value='12'>Diciembre</option>
+</select>
+Dia:
+<select name='dia' id="entrada-dia">
+<% for(var i=1;i<=31;i++) {%>
+    <option value='<%=i%>'><%= i%></option>
+<%}%>
+
+
+</select>
+
+
+<input type="submit" id="entrada-submit" value='Buscar'/><BR/>
+
+
+<div id='entrada-resultado'></div>
+
+</div>
+
+</script>

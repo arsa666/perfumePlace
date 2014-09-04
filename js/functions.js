@@ -84,10 +84,8 @@ function fetchAndDisplayCliente(model, el, val){
     val = val || false;
     model.fetch({
     success: function (m) {
-        debugger;
         if(!_.isNull(m.get('nombre'))){//if exist because name is not null always
             if (val === false) {
-                debugger;
                 el.find("#cedulaCliente").val(m.escape("id"));
                 el.find("#ventasCliente").html(m.escape("nombre"));
                 el.find("#numeroCliente").html(m.escape("celular"));
@@ -102,6 +100,13 @@ function fetchAndDisplayCliente(model, el, val){
         }
     }
     });
+}
+
+function resetForm(el){
+    el.find('#productoName').html('');
+    el.find('#productoSize').html('');
+
+    el.find('input[type="text"]').val('');
 }
 
 

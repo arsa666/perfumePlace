@@ -1,6 +1,6 @@
 var agregarProductoView = Backbone.View.extend({
 	events: {
-        'click #agregarProducto :submit': 'submitForm',
+        'click #agregar-submit': 'submitForm',
         "keyup #agregarCOD": "displayProductoDetails"
 
 	},
@@ -18,6 +18,7 @@ var agregarProductoView = Backbone.View.extend({
                     if(!_.isNull(m.get('name'))){//if exist.
                         var x = confirm('Producto ya registrado con codigo: ' + id + ' y nombre: ' + m.get('name') + '. Desea modificarlo?');
                         if (x) {
+                            el.find('form').trigger('reset');
                             Backbone.history.navigate('#/modificar');
                         } else {
                             addDisabled(el.find('#agregar-submit'));
@@ -38,17 +39,17 @@ var agregarProductoView = Backbone.View.extend({
 
 	    var producto = new productoModel({id:id, name:name, size: tamano});
         producto.save({}, {
-        success: function (model, response) {
-            if(response == "1"){
-                el.find('form').trigger('reset');
-                App.productos.add(model);
-                alert("Se ha agregado el producto a la base de datos");
+            success: function (model, response) {
+                if(response == "1"){
+                    resetForm(el);
+                    App.productos.add(model);
+                    alert("Se ha agregado el producto a la base de datos");
+                }
+            },
+            error: function (model, response) {
+                alertError(response);
             }
-        },
-        error: function (model, response) {
-            alertError(response);
-        }
-});
+        });
     },
 	render:function (eventName) {
 

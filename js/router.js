@@ -9,7 +9,7 @@ window.App = {};
 
 var MessageRouter = Backbone.Router.extend({
     initialize:function(){
-        App.productos = new productoCollection();
+        //App.productos = new productoCollection();
         // App.clientesCredito = new clienteCollection();
 
 
@@ -39,7 +39,8 @@ var MessageRouter = Backbone.Router.extend({
         "abonos": "displayAbonos",
         "gastos": "displayGastos",
         "agregar": "displayAgregarProductoNuevo",
-	    "modificar": "displayModificarProducto"
+	    "modificar": "displayModificarProducto",
+        "entradaBodega": "entradaBodega",
     },
     //MENU
      menuDisplay: function () {
@@ -56,34 +57,39 @@ var MessageRouter = Backbone.Router.extend({
         var clienteCredito = new clienteCreditoView({});
         this._attachAndRenderView(clienteCredito);
     },
+    entradaBodega: function () {
+        closeView(App.currentView);
+        var entradaBodega = new entradaView({});
+        this._attachAndRenderView(entradaBodega);
+    },
     mercanciaBodega: function () {
         closeView(App.currentView);
-        var mercanciaBodega = new mercanciaBodegaView({collection: App.productos});
+        var mercanciaBodega = new mercanciaBodegaView({});
         this._attachAndRenderView(mercanciaBodega);
     },
     mercanciaAfuera: function () {
         closeView(App.currentView);
-        var mercanciaAfuera = new mercanciaAfueraView({collection: App.productos});
+        var mercanciaAfuera = new mercanciaAfueraView({});
         this._attachAndRenderView(mercanciaAfuera);
     },
     displayModificarProducto: function () {
         closeView(App.currentView);
-	    var modificar = new modificarProductoView({collection: App.productos});
+	    var modificar = new modificarProductoView({});
         this._attachAndRenderView(modificar);
     },
     displayVentas: function(){
         closeView(App.currentView);
-        var ventas = new ventasView({collection:App.productos});
+        var ventas = new ventasView({});
         this._attachAndRenderView(ventas);
     },
     displayReferencias: function(){
         closeView(App.currentView);
-        var referenciaBuscar = new referenciaBuscarView({collection: App.productos});
+        var referenciaBuscar = new referenciaBuscarView({});
         this._attachAndRenderView(referenciaBuscar);
     },
     displayAgregarProductoNuevo: function(){
         closeView(App.currentView);
-        var agregarProducto = new agregarProductoView({collection: App.productos});
+        var agregarProducto = new agregarProductoView({});
         this._attachAndRenderView(agregarProducto);
     }
 

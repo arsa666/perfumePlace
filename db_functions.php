@@ -263,61 +263,8 @@ function ventaRegistrar($con, $coid,$precioVenta, $cantidad, $tipoVenta, $total,
     }        
 }
 
-function getProductoCollection($con)
-  {
-    // $sql="SELECT * FROM Productos";
-    // $result=mysqli_query($con, $sql);
-
-    // $myArray = array();
-    // $i = 0;
-    // while($row = mysqli_fetch_array($result, MYSQL_ASSOC))
-    // {
-    //   array_push($myArray, $row);
-
-      
-    //   // if($i > )
-    //   //   break;
-
-    //   // $i++;
-    // }
-    // //mysqli_free_result($result);
-    // $myArray = json_encode($myArray);
-    // return $myArray;
-
-
-    ///
-
-
-    // if($stmt = $con->prepare("SELECT * FROM Productos"))
-    //   { 
-    //     $myArray = array();
-        
-    //     $stmt->execute();
-    //       /* Bind results */
-    //     $stmt->bind_result($id, $name, $size);
-    //     /* Fetch the value */
-    //     //$stmt->fetch();
-    //     //$json = array();
-
-    //      while ($row = $stmt->fetch()) {
-    //             $json = array();
-    //             $json['id'] = $id;
-    //             $json['name'] = $name;
-    //             $json['size'] = $size;
-    //             $json = json_encode($json);
-    //             array_push($myArray, $json);
-    //     }
-    //     $stmt->close();
-
-    //     return $myArray;
-    //     //return json_encode($json);
-    //   }
-
-
-  }
-
-  function getClientCollection($con)
-  {
+function getClientCollection($con)
+{
     $sql="SELECT * FROM ClienteCredito";
     $result=mysqli_query($con, $sql);
 
@@ -330,32 +277,75 @@ function getProductoCollection($con)
     mysqli_free_result($result);
     $myArray = json_encode($myArray);
     return $myArray;
-  }
+}
 
-  function getProducto($con, $id)
-  { 
-    if($stmt = $con->prepare("SELECT * FROM Productos where id=?"))
-      { 
-        $id = (string)$id;
-        if (!$stmt->bind_param("s", $id)){
-          echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
-         
-        }
-        $stmt->execute();
-          /* Bind results */
-        $stmt->bind_result($id, $name, $size);
-        /* Fetch the value */
-        $stmt->fetch();
-        $stmt->close();
-        $json = array();
+function getEntradaBodega($con, $year, $month, $day)
+{ 
+  $start = $year."-".$month."-".$day." 00:00:00";
+  $end = $year."-".$month."-".$day." 23:59:59";
 
-        $json['id'] = $id;
-        $json['name'] = $name;
-        $json['size'] = $size;
+  // if($stmt = $con->prepare("SELECT name,cantidad, precio,lugar FROM `MercanciaBodega` WHERE time BETWEEN '?' AND '?' ORDER BY `time` ASC"))
+  //   { 
+      
+  //     if (!$stmt->bind_param("ss", $start, $end)){
+  //       echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+       
+  //     }
+  //     $stmt->execute();
+  //        Bind results 
+  //     $stmt->bind_result($name, $cantidad, $precio, $lugar);
+  //     /* Fetch the value */
+  //     $stmt->fetch();
+  //     $stmt->close();
+  //     $json = array();
 
-        return json_encode($json);
+  //     $json['name'] = $name;
+  //     $json['cantidad'] = $cantidad;
+  //     $json['precio'] = $precio;
+  //     $json['lugar'] = $lugar;
+
+
+  //     return json_encode($json);
+  //   }
+
+    $sql="SELECT * FROM `MercanciaBodega` WHERE time BETWEEN '$start' AND '$end' ORDER BY `time` ASC";
+    $result=mysqli_query($con, $sql);
+
+    $myArray = array();
+
+    while($row = mysqli_fetch_array($result, MYSQL_ASSOC))
+    {
+      array_push($myArray, $row);
+    }
+    mysqli_free_result($result);
+    $myArray = json_encode($myArray);
+    return $myArray;
+}
+
+function getProducto($con, $id)
+{ 
+  if($stmt = $con->prepare("SELECT * FROM Productos where id=?"))
+    { 
+      $id = (string)$id;
+      if (!$stmt->bind_param("s", $id)){
+        echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+       
       }
-  }
+      $stmt->execute();
+        /* Bind results */
+      $stmt->bind_result($id, $name, $size);
+      /* Fetch the value */
+      $stmt->fetch();
+      $stmt->close();
+      $json = array();
+
+      $json['id'] = $id;
+      $json['name'] = $name;
+      $json['size'] = $size;
+
+      return json_encode($json);
+    }
+}
 
   function getCliente($con, $id)
   { 

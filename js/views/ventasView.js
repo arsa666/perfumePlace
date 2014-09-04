@@ -6,74 +6,74 @@ var ventasView = Backbone.View.extend({
 	'keyup #ventasCantidad': 'loadTotal',
 	'click input:radio[name=ventaPago]:checked': 'toggleOptions',
 	'click input:radio[name=ventaCategory]:checked': 'loadTotal',
-	'click input:submit': 'submitForm'
+	'click #ventas-submit': 'submitForm'
     },
     className: "content",
     submitForm: function (e) {
-	e.preventDefault();
-	e.stopPropagation();
-	var el = this.$el;
+		e.preventDefault();
+		e.stopPropagation();
+		var el = this.$el;
 
-	var cod = el.find("#ventasCod").val();
-	var nombre = el.find("#productoName").text();
-	var precio = el.find("#ventasPrecio").val();
-	var cantidad = el.find("#ventasCantidad").val();
-	var categoria = el.find("[name=ventaCategory]:checked").val();
-	var ventaPago = el.find("[name=ventaPago]:checked").val();
-	var otroAlmacen = el.find("input[name='nombreAlmacen']").val();
-	var cedulaCliente = '';
+		var cod = el.find("#ventasCod").val();
+		var nombre = el.find("#productoName").text();
+		var precio = el.find("#ventasPrecio").val();
+		var cantidad = el.find("#ventasCantidad").val();
+		var categoria = el.find("[name=ventaCategory]:checked").val();
+		var ventaPago = el.find("[name=ventaPago]:checked").val();
+		var otroAlmacen = el.find("input[name='nombreAlmacen']").val();
+		var cedulaCliente = '';
 
-	if(ventaPago === "Credito"){
-	    cedulaCliente = el.find("#cedulaCliente").val();
+		if(ventaPago === "Credito"){
+		    cedulaCliente = el.find("#cedulaCliente").val();
 
-	    if(cedulaCliente === ""){
-		alert('No puede dejar la cedula del cliente en blanco en venta de Credito');
-		return;
-	    }
-	}
-	if(ventaPago === "OtroAlmacen"){
-	    nombreAlmacen = el.find("input[name='nombreAlmacen']").val();
+		    if(cedulaCliente === ""){
+			alert('No puede dejar la cedula del cliente en blanco en venta de Credito');
+			return;
+		    }
+		}
+		if(ventaPago === "OtroAlmacen"){
+		    nombreAlmacen = el.find("input[name='nombreAlmacen']").val();
 
-	    if(nombreAlmacen === ""){
-		alert('No puede dejar el nombre del almacen al que le transfirio el perfume en blanco, ingrese un nombre');
-		return;
-	    }
-	}
+		    if(nombreAlmacen === ""){
+			alert('No puede dejar el nombre del almacen al que le transfirio el perfume en blanco, ingrese un nombre');
+			return;
+		    }
+		}
 
-	var total = el.find("#ventasTotal").val();
+		var total = el.find("#ventasTotal").val();
 
-	if(cod === "" || nombre ==="" || precio === "" || cantidad === "" || categoria === ""
-	   || total === ""){
-	    alert('No puede dejar espacios en blanco');
-	    return;
-	}
+		if(cod === "" || nombre ==="" || precio === "" || cantidad === "" || categoria === ""
+		   || total === ""){
+		    alert('No puede dejar espacios en blanco');
+		    return;
+		}
 
-	var ventas = new ventasModel({coid:cod, nombre:nombre, precioVenta:precio, cantidad:cantidad, tipoVenta:categoria, cedulaCliente: cedulaCliente, total:total, formaPago: ventaPago, otroAlmacen: otroAlmacen });
+		var ventas = new ventasModel({coid:cod, nombre:nombre, precioVenta:precio, cantidad:cantidad, tipoVenta:categoria, cedulaCliente: cedulaCliente, total:total, formaPago: ventaPago, otroAlmacen: otroAlmacen });
 
-	ventas.save({}, {
-	    success: function (model, response) {
-	            if(response === 0){
-	            	el.find('form').trigger('reset');
-	            	el.find('#productoName').html('');
-	            	el.find('#productoSize').html('');
-	            	el.find('#ventasCliente').html('');
-	            	el.find('#numeroCliente').html('');
+		ventas.save({}, {
+		    success: function (model, response) {
+		            if(response === 0){
+		            	resetForm(el);
+		            	el.find('#productoName').html('');
+		            	el.find('#productoSize').html('');
+		            	el.find('#ventasCliente').html('');
+		            	el.find('#numeroCliente').html('');
 
 
-	            	alert('Venta Registrada Correctamente');
-	            	//var ultimaVenta = new ultimaVentaView({model:model});
-	                //el.find("#ultimaVenta").html(ultimaVenta.render().el);
-	            }else if (response === 10){
-	            	alert('"Cliente con cedula: ' + cedulaCliente + ' no existe, porfavor registre el cliente en la seccion de registrar cliente. "');
+		            	alert('Venta Registrada Correctamente');
+		            	//var ultimaVenta = new ultimaVentaView({model:model});
+		                //el.find("#ultimaVenta").html(ultimaVenta.render().el);
+		            }else if (response === 10){
+		            	alert('"Cliente con cedula: ' + cedulaCliente + ' no existe, porfavor registre el cliente en la seccion de registrar cliente. "');
 
-	            }else{
-	            	alert('Solo quedan: ' +response+ ' piezas en la sala de venta con codigo de barra: ' +model.coid);
-	            }
-        	},
-	    error: function (model, response) {
-	        alert('Error al insertar venta, contacte administrador: '+response.responseText+ " con codigo de barra: " +model.coid);
-	    }
-	});
+		            }else{
+		            	alert('Solo quedan: ' +response+ ' piezas en la sala de venta con codigo de barra: ' +model.coid);
+		            }
+	        	},
+		    error: function (model, response) {
+		        alert('Error al insertar venta: '+response.responseText+ " con codigo de barra: " +model.coid);
+		    }
+		});
     },
     toggleOptions: function () {
 

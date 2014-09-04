@@ -1,13 +1,12 @@
 var mercanciaBodegaView = Backbone.View.extend({
     events:{
-	'click input:submit': 'insertMercanciaBodega',
+	'click #bodega-ingresar': 'insertMercanciaBodega',
 	'keyup #coid-bodega': 'displayProductoName',
     },
     className: "content",
     displayProductoName: function () {
     	el = this.$el;
     	id = el.find("#coid-bodega").val();
-
     	if(id !== ""){
     	    var model = new productoModel({id: id});
     	    fetchAndDisplayProduct(model, el, false);
@@ -31,7 +30,7 @@ var mercanciaBodegaView = Backbone.View.extend({
     	mercancia.save({}, {
     	    success: function (model, response) {
         		if (response === 0) {
-                    el.find('form').trigger('reset');
+                    resetForm(el);
         		    alert("Producto Insertado Correctamente");
         		} else {
         		    if(response === 1452){
