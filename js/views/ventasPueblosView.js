@@ -1,7 +1,4 @@
 var ventasView = Backbone.View.extend({
-	initialize: function (options) {
-		 this.options = options;
-	},
     events:{
 	'keyup #ventasCod': 'loadName',
 	'keyup #cedulaCliente': 'loadCliente',
@@ -51,7 +48,7 @@ var ventasView = Backbone.View.extend({
 		    return;
 		}
 
-		var ventas = new ventasModel({coid:cod, url: this.options.url, nombre:nombre, precioVenta:precio, cantidad:cantidad, tipoVenta:categoria, cedulaCliente: cedulaCliente, total:total, formaPago: ventaPago, otroAlmacen: otroAlmacen });
+		var ventas = new ventasModel({coid:cod, nombre:nombre, precioVenta:precio, cantidad:cantidad, tipoVenta:categoria, cedulaCliente: cedulaCliente, total:total, formaPago: ventaPago, otroAlmacen: otroAlmacen });
 
 		ventas.save({}, {
 		    success: function (model, response) {

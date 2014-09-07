@@ -64,6 +64,59 @@ function getTotalAvailable($con, $table, $id){
       }
  }
 
+  function getCantidadProducto($con, $id){
+      $json = array();
+      if($stmt = $con->prepare("SELECT cantidad FROM MercanciaBodega where id=?"))
+      { 
+        $id = (string)$id;
+        if (!$stmt->bind_param("s", $id)){
+          echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+         
+        }
+        $stmt->execute();
+          /* Bind results */
+        $stmt->bind_result($cantidad);
+        /* Fetch the value */
+        $stmt->fetch();
+        $stmt->close();
+        $json['cantidad_bodega'] = $cantidad;       
+      }
+      if($stmt = $con->prepare("SELECT cantidad FROM MercanciaAfuera where id=?"))
+      { 
+        $id = (string)$id;
+        if (!$stmt->bind_param("s", $id)){
+          echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+         
+        }
+        $stmt->execute();
+          /* Bind results */
+        $stmt->bind_result($cantidad);
+        /* Fetch the value */
+        $stmt->fetch();
+        $stmt->close();
+        $json['cantidad_afuera'] = $cantidad;       
+      }
+
+      if($stmt = $con->prepare("SELECT cantidad FROM MercanciaPueblos where id=?"))
+      { 
+        $id = (string)$id;
+        if (!$stmt->bind_param("s", $id)){
+          echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+         
+        }
+        $stmt->execute();
+          /* Bind results */
+        $stmt->bind_result($cantidad);
+        /* Fetch the value */
+        $stmt->fetch();
+        $stmt->close();
+        $json['cantidad_pueblos'] = $cantidad;       
+      }
+
+      $json = json_encode($json);
+      return $json;
+ }
+
 
 //insert into register table of either bodega or fuera. 
 function plusRegisterInventory($con, $table, $id, $quantity,$precio, $lugar, $name) {
@@ -176,6 +229,43 @@ function insertMercanciaAfuera($con, $id, $cantidad){
     }
 }
 
+function insertMercanciaPueblos($con, $id, $cantidad){
+  $id = $id;
+  $cantidad = (int)$cantidad;
+  $precio = floatval($precio);
+
+  
+  if(is_numeric($id) === false){
+      return 0;
+    }
+
+    $cantidadActual = 0;
+    $cantidadActual = getTotalAvailable($con, "MercanciaBodega", $id);//get total from bodega
+    if($cantidadActual == 0){
+        return -1;     
+    }else{
+      $total = $cantidadActual - $cantidad;//if amount wanted is possible. 
+      if($total >= 0){
+            $insertedCorrectly = false;
+            $insertedCorrectly =  minusInventory($con, "MercanciaBodega", $id, $cantidad);//substract from bodega.
+
+            if($insertedCorrectly === 0){ //if correctly substracted from bodega then add to sala de venta.
+              $cantidadActual = 0;                
+              $cantidadActual = getTotalAvailable($con, "MercanciaPueblos", $id);
+              $getPrecioLugarBodega = getPrecioLugarBodega($con, $id);
+              $precio = $getPrecioLugarBodega['precio'];
+              $lugar = $getPrecioLugarBodega['lugar'];
+              $checkInsertion = plusInventory($con, "MercanciaPueblos", $id, $cantidad, $precio, $lugar);
+              return $checkInsertion;             
+            }
+            return $insertedCorrectly;
+      }else{
+        return $cantidadActual;
+      }
+    }
+}
+
+
 function insertMercanciaBodega($con, $id, $cantidad, $precio, $lugar){
   $id = $id;
   $cantidad = (int)$cantidad;
@@ -263,6 +353,53 @@ function ventaRegistrar($con, $coid,$precioVenta, $cantidad, $tipoVenta, $total,
     }        
 }
 
+function ventaRegistrarPueblos($con, $coid,$precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen){
+  
+  $precioVenta = floatval($precioVenta);
+  $cantidad = intval($cantidad);
+  $total = floatval($total);
+  $nombre = getNameOfProduct($con, $coid);
+
+  if(is_numeric($coid) == false){
+      return 0;
+    }
+
+    $cantidadPueblos =  getTotalAvailable($con, "MercanciaPueblos", $coid);
+    $totalLeft = $cantidadPueblos - $cantidad;
+    if($totalLeft >= 0 && $cantidadPueblos !== 0){
+      if($formaPago == 'Credito') {//if credito venta then check for valid clientecredito. 
+          $clienteBool = checkClienteCredito($con, $cedulaCliente);
+          if($clienteBool === false) {
+            return 10;//cedula cliente error
+          }          
+      }
+        if($stmt = $con->prepare ("INSERT INTO VentasDiariasPueblos (coid, nombre, precioVenta, cantidad, tipoVenta, total, cedulaCliente, formaPago, otroAlmacen) values (?,?,?,?,?,?,?,?,?)")){
+
+              if (!$stmt->bind_param("ssdisdsss", $coid, $nombre, $precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen)){
+                 echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+                 $response = "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error; 
+                 return $response; 
+              }
+              if (!$stmt->execute()) {
+                  echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;   
+                  $response =  "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+                  return $response;
+                }              
+            $stmt->close();
+            //venta registered correctly so now substract from mercanciaPueblos.
+            $insertedCorrectly =  minusInventory($con, "MercanciaPueblos", $coid, $cantidad);
+
+            return $insertedCorrectly;
+            
+        }
+    }else{
+        if($cantidadPueblos === 0){
+            return "Este producto no se encuentra en los pueblos";
+        }
+        return $cantidadPueblos;
+    }        
+}
+
 function getClientCollection($con)
 {
     $sql="SELECT * FROM ClienteCredito";
@@ -284,31 +421,45 @@ function getEntradaBodega($con, $year, $month, $day)
   $start = $year."-".$month."-".$day." 00:00:00";
   $end = $year."-".$month."-".$day." 23:59:59";
 
-  // if($stmt = $con->prepare("SELECT name,cantidad, precio,lugar FROM `MercanciaBodega` WHERE time BETWEEN '?' AND '?' ORDER BY `time` ASC"))
-  //   { 
-      
-  //     if (!$stmt->bind_param("ss", $start, $end)){
-  //       echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
-       
-  //     }
-  //     $stmt->execute();
-  //        Bind results 
-  //     $stmt->bind_result($name, $cantidad, $precio, $lugar);
-  //     /* Fetch the value */
-  //     $stmt->fetch();
-  //     $stmt->close();
-  //     $json = array();
+    $sql="SELECT * FROM `RegistroMercanciaBodega` WHERE time BETWEEN '$start' AND '$end' ORDER BY `name` ASC";
+    $result=mysqli_query($con, $sql);
 
-  //     $json['name'] = $name;
-  //     $json['cantidad'] = $cantidad;
-  //     $json['precio'] = $precio;
-  //     $json['lugar'] = $lugar;
+    $myArray = array();
 
+    while($row = mysqli_fetch_array($result, MYSQL_ASSOC))
+    {
+      array_push($myArray, $row);
+    }
+    mysqli_free_result($result);
+    $myArray = json_encode($myArray);
+    return $myArray;
+}
 
-  //     return json_encode($json);
-  //   }
+function getEntradaPueblos($con, $year, $month, $day)
+{ 
+  $start = $year."-".$month."-".$day." 00:00:00";
+  $end = $year."-".$month."-".$day." 23:59:59";
 
-    $sql="SELECT * FROM `MercanciaBodega` WHERE time BETWEEN '$start' AND '$end' ORDER BY `time` ASC";
+    $sql="SELECT * FROM `RegistroMercanciaPueblos` WHERE time BETWEEN '$start' AND '$end' ORDER BY `name` ASC";
+    $result=mysqli_query($con, $sql);
+
+    $myArray = array();
+
+    while($row = mysqli_fetch_array($result, MYSQL_ASSOC))
+    {
+      array_push($myArray, $row);
+    }
+    mysqli_free_result($result);
+    $myArray = json_encode($myArray);
+    return $myArray;
+}
+
+function getEntradaAfuera($con, $year, $month, $day)
+{ 
+  $start = $year."-".$month."-".$day." 00:00:00";
+  $end = $year."-".$month."-".$day." 23:59:59";
+
+    $sql="SELECT * FROM `RegistroMercanciaAfuera` WHERE time BETWEEN '$start' AND '$end' ORDER BY `name` ASC";
     $result=mysqli_query($con, $sql);
 
     $myArray = array();

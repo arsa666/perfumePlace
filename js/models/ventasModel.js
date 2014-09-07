@@ -1,6 +1,6 @@
 var ventasModel = Backbone.Model.extend({
 	initialize: function(options){
-		this.url = 'api/ventasModel.php';
+		this.url = options.url;
 		this.coid = options.coid;
 		this.nombre = options.nombre;
 		this.precioVenta = options.precioVenta;
@@ -8,8 +8,8 @@ var ventasModel = Backbone.Model.extend({
 		this.tipoVenta = options.tipoVenta;
 		this.nombreCliente = options.nombreCliente;
 		this.numeroCliente = options.numeroCliente;
-		this.total = options.total;	
+		this.total = options.total;
 		this.formaPago = options.formaPago;
-		this.otroAlmacen = options.otroAlmacen;	
-	}    
+		this.otroAlmacen = options.otroAlmacen;
+	}
 });

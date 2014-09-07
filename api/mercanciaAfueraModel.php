@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
 	$db = openDB();
 	
 
- 	$results = insertMercanciaAfuera($db, $id, $cantidad, $precio, $lugar);
+ 	$results = insertMercanciaAfuera($db, $id, $cantidad);
  	
  	closeDB($db);
  	echo $results;

@@ -9,12 +9,6 @@ window.App = {};
 
 var MessageRouter = Backbone.Router.extend({
     initialize:function(){
-        //App.productos = new productoCollection();
-        // App.clientesCredito = new clienteCollection();
-
-
-        // App.clientesCredito.fetch();
-        //App.views = new Array();
         App.currentView;
         $('#main').empty();
         this.menuDisplay();
@@ -31,7 +25,6 @@ var MessageRouter = Backbone.Router.extend({
         ""      : "menuDisplay",
         "clienteCredito" : "clienteCredito",
         "ventas": "displayVentas",
-        "compras": "displayCompras",
         "mercanciaAfuera": "mercanciaAfuera",
 	    "mercanciaBodega": "mercanciaBodega",
         "referencias": "displayReferencias",
@@ -39,8 +32,16 @@ var MessageRouter = Backbone.Router.extend({
         "abonos": "displayAbonos",
         "gastos": "displayGastos",
         "agregar": "displayAgregarProductoNuevo",
-	    "modificar": "displayModificarProducto",
+	"modificar": "displayModificarProducto",
         "entradaBodega": "entradaBodega",
+        "entradaAfuera": "entradaAfuera",
+	"cantidadProducto": "cantidadProducto",
+    "mercanciaPueblos": "mercanciaPueblos",
+    "ventasPueblos": "displayVentasPueblos",
+    "entradaPueblos": "entradaPueblos",
+
+
+
     },
     //MENU
      menuDisplay: function () {
@@ -57,10 +58,28 @@ var MessageRouter = Backbone.Router.extend({
         var clienteCredito = new clienteCreditoView({});
         this._attachAndRenderView(clienteCredito);
     },
+    cantidadProducto: function () {
+        closeView(App.currentView);
+        var cantidadProducto = new cantidadProductoView({});
+        this._attachAndRenderView(cantidadProducto);
+    },
     entradaBodega: function () {
         closeView(App.currentView);
-        var entradaBodega = new entradaView({});
+        var url = 'api/entradaBodegaModel.php';
+        var entradaBodega = new entradaView({url: url});
         this._attachAndRenderView(entradaBodega);
+    },
+    entradaPueblos: function () {
+        closeView(App.currentView);
+        var url = 'api/entradaPueblosModel.php';
+        var entradaBodega = new entradaView({url: url});
+        this._attachAndRenderView(entradaBodega);
+    },
+    entradaAfuera: function () {
+        closeView(App.currentView);
+        var url = 'api/entradaAfueraModel.php';
+        var entradaAfuera = new entradaView({url: url});
+        this._attachAndRenderView(entradaAfuera);
     },
     mercanciaBodega: function () {
         closeView(App.currentView);
@@ -72,6 +91,11 @@ var MessageRouter = Backbone.Router.extend({
         var mercanciaAfuera = new mercanciaAfueraView({});
         this._attachAndRenderView(mercanciaAfuera);
     },
+    mercanciaPueblos: function () {
+        closeView(App.currentView);
+        var mercanciaPueblos = new mercanciaPueblosView({});
+        this._attachAndRenderView(mercanciaPueblos);
+    },
     displayModificarProducto: function () {
         closeView(App.currentView);
 	    var modificar = new modificarProductoView({});
@@ -79,7 +103,12 @@ var MessageRouter = Backbone.Router.extend({
     },
     displayVentas: function(){
         closeView(App.currentView);
-        var ventas = new ventasView({});
+        var ventas = new ventasView({url: 'api/ventasModel.php'});
+        this._attachAndRenderView(ventas);
+    },
+    displayVentasPueblos: function(){
+        closeView(App.currentView);
+        var ventas = new ventasView({url: 'api/ventasPueblosModel.php'});
         this._attachAndRenderView(ventas);
     },
     displayReferencias: function(){

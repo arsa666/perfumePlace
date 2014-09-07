@@ -8,7 +8,8 @@ $fileName = "js/views/$argv1".".js";
 $templateName = "js/templates/$argv1"."Template.html";
 $file=fopen($fileName,"w") or exit("Unable to create view file!");
 
-fwrite($file,"var $argv1 = Backbone.View.extend({
+fwrite($file,"var $argv1 = Backbone.View.extend({    
+	className:'content',
 	events:{
 	'click .template': 'templateFunc'
 	},
