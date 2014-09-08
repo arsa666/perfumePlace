@@ -64,6 +64,25 @@ function getTotalAvailable($con, $table, $id){
       }
  }
 
+ function getTypeOfProduct($con, $id){
+      if($stmt = $con->prepare("SELECT type FROM Productos where id=?"))
+      { 
+        $id = (string)$id;
+        if (!$stmt->bind_param("s", $id)){
+          echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+         
+        }
+        $stmt->execute();
+          /* Bind results */
+        $stmt->bind_result($type);
+        /* Fetch the value */
+        $stmt->fetch();
+        $stmt->close();
+        return $type;
+      }
+ }
+
+
   function getCantidadProducto($con, $id){
       $json = array();
       if($stmt = $con->prepare("SELECT cantidad FROM MercanciaBodega where id=?"))
@@ -306,12 +325,13 @@ function checkClienteCredito($con, $cedula) {
   }
 }
 
-function ventaRegistrar($con, $coid,$precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen){
+function ventaRegistrar($con, $coid, $precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen){
   
   $precioVenta = floatval($precioVenta);
   $cantidad = intval($cantidad);
   $total = floatval($total);
   $nombre = getNameOfProduct($con, $coid);
+  $type = getTypeOfProduct($con, $coid);
 
   if(is_numeric($coid) == false){
       return 0;
@@ -326,9 +346,9 @@ function ventaRegistrar($con, $coid,$precioVenta, $cantidad, $tipoVenta, $total,
             return 10;//cedula cliente error
           }          
       }
-        if($stmt = $con->prepare ("INSERT INTO VentasDiarias (coid, nombre, precioVenta, cantidad, tipoVenta, total, cedulaCliente, formaPago, otroAlmacen) values (?,?,?,?,?,?,?,?,?)")){
+        if($stmt = $con->prepare ("INSERT INTO VentasDiarias (coid, nombre, type, precioVenta, cantidad, tipoVenta, total, cedulaCliente, formaPago, otroAlmacen) values (?,?,?,?,?,?,?,?,?,?)")){
 
-              if (!$stmt->bind_param("ssdisdsss", $coid, $nombre, $precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen)){
+              if (!$stmt->bind_param("sssdisdsss", $coid, $nombre, $type, $precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen)){
                  echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
                  $response = "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error; 
                  return $response; 
@@ -353,12 +373,16 @@ function ventaRegistrar($con, $coid,$precioVenta, $cantidad, $tipoVenta, $total,
     }        
 }
 
-function ventaRegistrarPueblos($con, $coid,$precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen){
+
+
+function ventaRegistrarPueblos($con, $coid, $precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen){
   
   $precioVenta = floatval($precioVenta);
   $cantidad = intval($cantidad);
   $total = floatval($total);
   $nombre = getNameOfProduct($con, $coid);
+  $type = getTypeOfProduct($con, $coid);
+  
 
   if(is_numeric($coid) == false){
       return 0;
@@ -373,9 +397,9 @@ function ventaRegistrarPueblos($con, $coid,$precioVenta, $cantidad, $tipoVenta, 
             return 10;//cedula cliente error
           }          
       }
-        if($stmt = $con->prepare ("INSERT INTO VentasDiariasPueblos (coid, nombre, precioVenta, cantidad, tipoVenta, total, cedulaCliente, formaPago, otroAlmacen) values (?,?,?,?,?,?,?,?,?)")){
+        if($stmt = $con->prepare ("INSERT INTO VentasDiariasPueblos (coid, nombre, type, precioVenta, cantidad, tipoVenta, total, cedulaCliente, formaPago, otroAlmacen) values (?,?,?,?,?,?,?,?,?,?)")){
 
-              if (!$stmt->bind_param("ssdisdsss", $coid, $nombre, $precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen)){
+              if (!$stmt->bind_param("sssdisdsss", $coid, $nombre, $type, $precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen)){
                  echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
                  $response = "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error; 
                  return $response; 
@@ -484,7 +508,7 @@ function getProducto($con, $id)
       }
       $stmt->execute();
         /* Bind results */
-      $stmt->bind_result($id, $name, $size);
+      $stmt->bind_result($id, $name, $size, $type);
       /* Fetch the value */
       $stmt->fetch();
       $stmt->close();
@@ -493,6 +517,8 @@ function getProducto($con, $id)
       $json['id'] = $id;
       $json['name'] = $name;
       $json['size'] = $size;
+      $json['type'] = $type;
+
 
       return json_encode($json);
     }
@@ -542,15 +568,14 @@ function getProducto($con, $id)
         }
   }
 
-  function updateOrCreateProducto($con, $id, $name, $size)
+  function updateOrCreateProducto($con, $id, $name, $size, $type)
   {
     if(is_numeric($id) == false){
       return 0;
     }
+    if($stmt = $con->prepare ("INSERT INTO Productos (id, name, size, type) values (?, ?, ?, ?) ON DUPLICATE KEY UPDATE name=?, size=?, type=?")){
 
-    if($stmt = $con->prepare ("INSERT INTO Productos (id, name, size) values (?, ?, ?) ON DUPLICATE KEY UPDATE name=?, size=?")){
-
-      if (!$stmt->bind_param("sssss", $id, $name, $size, $name, $size)){
+      if (!$stmt->bind_param("sssssss", $id, $name, $size, $type, $name, $size, $type)){
          echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
           $response = "0";    
           return $response;     

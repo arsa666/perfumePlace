@@ -7,6 +7,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
 	$id = $data->{'id'};
 	$name = $data->{'name'};
     $size = $data->{'size'};
+    $type = $data->{'type'};
+
     
 	//sanitation checks
     if(ctype_alnum($id) == false || $name == ''){
@@ -14,9 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
       return;
     }
 
+
  	$db = openDB();
 
- 	$results = updateOrCreateProducto($db, $id, $name, $size);
+ 	$results = updateOrCreateProducto($db, $id, $name, $size, $type);
  	
  	closeDB($db);
 

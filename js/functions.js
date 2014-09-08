@@ -59,19 +59,23 @@ function alertError(response){
 
     alert(msg);
 }
-
+//val es el input or just simple span text. input es con val y span con html
 function fetchAndDisplayProduct(model, el, val){
     val = val || false;
     model.fetch({
 	success: function (m) {
 	    if(!_.isNull(m.get('name'))){//if exist because name is not null always
-		if (val === false) {
-		    el.find("#productoName").html(m.escape("name"));
-		    el.find("#productoSize").html(m.escape("size"));
-		} else{
-		    el.find("#productoName").val(m.escape("name"));
-		    el.find("#productoSize").val(m.escape("size"));
-		}
+    		if (val === false) {
+    		    el.find("#productoName").html(m.escape("name"));
+    		    el.find("#productoSize").html(m.escape("size"));
+                el.find("#productoType").html(m.escape("type"));
+
+    		} else{
+    		    el.find("#productoName").val(m.escape("name"));
+    		    el.find("#productoSize").val(m.escape("size"));
+                el.find("#productoType").val(m.escape("type")).change();
+
+    		}
 	    } else {
 		   el.find("#productoName").html("No existe este producto, <a href='#/agregar'>desea registrarlo?</a>");
 		   el.find("#productoSize").html("");

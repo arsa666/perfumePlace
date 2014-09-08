@@ -36,13 +36,14 @@ var agregarProductoView = Backbone.View.extend({
         var id = el.find('input[name="id"]').val();
         var name = el.find('input[name="name"]').val();
         var tamano = el.find('input[name="tamano"]').val();
+        var type = el.find('select[name="type"]').val();
 
-	    var producto = new productoModel({id:id, name:name, size: tamano});
+
+	    var producto = new productoModel({id:id, name:name, size: tamano, type: type});
         producto.save({}, {
             success: function (model, response) {
                 if(response == "1"){
                     resetForm(el);
-                    App.productos.add(model);
                     alert("Se ha agregado el producto a la base de datos");
                 }
             },

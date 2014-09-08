@@ -21,10 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
       echo "Solo se permite numeros o letras en el codigo de barra, y no espacio en blanco";
       return;
     }
+
+
 	//sanitation checks
  	$db = openDB();
 
- 	$results = ventaRegistrarPueblos($db, $coid,$precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen);
+ 	$results = ventaRegistrarPueblos($db, $coid, $precioVenta, $cantidad, $tipoVenta, $total, $cedulaCliente, $formaPago, $otroAlmacen);
  	
  	closeDB($db);
 
