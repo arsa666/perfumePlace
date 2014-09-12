@@ -26,8 +26,6 @@ var cantidadProductoView = Backbone.View.extend({
                 el.find('#cantidad-bodega').html(obj['cantidad_bodega']);
                 el.find('#cantidad-afuera').html(obj['cantidad_afuera']);
                 el.find('#cantidad-pueblos').html(obj['cantidad_pueblos']);
-
-
             });
         }else{
             el.find("#productoName").html("Ponga un codigo para buscar");

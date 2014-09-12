@@ -87,6 +87,7 @@ function getTotalAvailable($con, $table, $id){
       $json = array();
       if($stmt = $con->prepare("SELECT cantidad FROM MercanciaBodega where id=?"))
       { 
+	$cantidad = 0;
         $id = (string)$id;
         if (!$stmt->bind_param("s", $id)){
           echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
@@ -102,6 +103,7 @@ function getTotalAvailable($con, $table, $id){
       }
       if($stmt = $con->prepare("SELECT cantidad FROM MercanciaAfuera where id=?"))
       { 
+	$cantidad = 0;
         $id = (string)$id;
         if (!$stmt->bind_param("s", $id)){
           echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
@@ -118,6 +120,7 @@ function getTotalAvailable($con, $table, $id){
 
       if($stmt = $con->prepare("SELECT cantidad FROM MercanciaPueblos where id=?"))
       { 
+	$cantidad = 0;
         $id = (string)$id;
         if (!$stmt->bind_param("s", $id)){
           echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;

@@ -17,6 +17,7 @@ var mercanciaAfueraView = Backbone.View.extend({
 
         success: function (model, response) {
             if(response === 0){
+		resetForm(el);
                 alert("Se han transferido " + cantidad + " piezas del producto con codigo de barra:  " + model.get('id') +" y nombre "+ el.find("#productoName").html() + " y tamano "  + el.find("#productoSize").html());
             }else{
                 if(response === 1452){
