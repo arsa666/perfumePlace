@@ -17,8 +17,9 @@ var mercanciaAfueraView = Backbone.View.extend({
 
         success: function (model, response) {
             if(response === 0){
-		resetForm(el);
+		
                 alert("Se han transferido " + cantidad + " piezas del producto con codigo de barra:  " + model.get('id') +" y nombre "+ el.find("#productoName").html() + " y tamano "  + el.find("#productoSize").html());
+		resetForm(el);
             }else{
                 if(response === 1452){
                     var r = confirm('Este producto no existe en el inventario, desea agregarlo? ');

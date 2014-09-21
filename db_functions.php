@@ -25,29 +25,30 @@ function getTotalAvailable($con, $table, $id){
 
 //substract inventory from table of mercanciAfuera and mercanciaBodega
  function minusInventory($con, $table, $id, $quantity){
-        $totalAvaialable =  getTotalAvailable($con, $table, $id);
-        $total = $totalAvaialable - $quantity;
-        if($totalAvaialable > 0 && $total >= 0){
-            if($stmt = $con->prepare ("INSERT INTO $table (id, cantidad) values (?, ?) ON DUPLICATE KEY UPDATE cantidad=?")){
-                        
-                    if (!$stmt->bind_param("sii", $id, $total, $total)){
-                        $response = mysqli_stmt_errno($stmt);
-                         return $response;
-                    }                    
-                    if (!$stmt->execute()) {
-                      $response = mysqli_stmt_errno($stmt);
-                      return $response;   
-                    }
-                    $stmt->close();
-                    return 0;
-            }
-        }else{
-            return "Error in Minus Inventory.";
-        }
+   $totalAvaialable =  getTotalAvailable($con, $table, $id);
+   $total = $totalAvaialable - $quantity;
+   
+   if($totalAvaialable > 0 && $total >= 0){
+     if($stmt = $con->prepare ("INSERT INTO $table (id, cantidad) values (?, ?) ON DUPLICATE KEY UPDATE cantidad=?")){
+       
+       if (!$stmt->bind_param("sii", $id, $total, $total)){
+	 $response = mysqli_stmt_errno($stmt);
+	 return $response;
+       }                    
+       if (!$stmt->execute()) {
+	 $response = mysqli_stmt_errno($stmt);
+	 return $response;   
+       }
+       $stmt->close();
+       return 0;
+     }
+   }else{
+     return "Error in Minus Inventory.";
+   }
  }
 
- function getNameOfProduct($con, $id){
-      if($stmt = $con->prepare("SELECT name FROM Productos where id=?"))
+function getNameOfProduct($con, $id){
+  if($stmt = $con->prepare("SELECT name FROM Productos where id=?"))
       { 
         $id = (string)$id;
         if (!$stmt->bind_param("s", $id)){
@@ -193,8 +194,8 @@ function plusInventory($con, $table, $id, $quantity,$precio, $lugar){
         }
  }
 
- function getPrecioLugarBodega($con, $id) {
-    if($stmt = $con->prepare("SELECT precio, lugar FROM MercanciaBodega where id=?"))
+function getPrecioLugarBodega($con, $id, $table) {
+    if($stmt = $con->prepare("SELECT precio, lugar FROM $table where id=?"))
       { 
         $id = (string)$id;
         if (!$stmt->bind_param("s", $id)){
@@ -238,7 +239,7 @@ function insertMercanciaAfuera($con, $id, $cantidad){
             if($insertedCorrectly === 0){ //if correctly substracted from bodega then add to sala de venta.
               $cantidadActual = 0;                
               $cantidadActual = getTotalAvailable($con, "MercanciaAfuera", $id);
-              $getPrecioLugarBodega = getPrecioLugarBodega($con, $id);
+              $getPrecioLugarBodega = getPrecioLugarBodega($con, $id, 'MercanciaBodega');
               $precio = $getPrecioLugarBodega['precio'];
               $lugar = $getPrecioLugarBodega['lugar'];
               $checkInsertion = plusInventory($con, "MercanciaAfuera", $id, $cantidad, $precio, $lugar);
@@ -251,30 +252,36 @@ function insertMercanciaAfuera($con, $id, $cantidad){
     }
 }
 
-function insertMercanciaPueblos($con, $id, $cantidad){
+function insertMercanciaPueblos($con, $id, $cantidad, $trans){
+  
   $id = $id;
   $cantidad = (int)$cantidad;
   $precio = floatval($precio);
-
   
+  $transTable = 'MercanciaBodega';
+
+  if (strcmp($trans, 'sala') === 0){
+    $transTable = 'MercanciaAfuera';
+  }
+    
   if(is_numeric($id) === false){
       return 0;
     }
 
     $cantidadActual = 0;
-    $cantidadActual = getTotalAvailable($con, "MercanciaBodega", $id);//get total from bodega
+    $cantidadActual = getTotalAvailable($con, $transTable, $id);//get total from bodega
     if($cantidadActual == 0){
         return -1;     
     }else{
       $total = $cantidadActual - $cantidad;//if amount wanted is possible. 
       if($total >= 0){
             $insertedCorrectly = false;
-            $insertedCorrectly =  minusInventory($con, "MercanciaBodega", $id, $cantidad);//substract from bodega.
+            $insertedCorrectly =  minusInventory($con, $transTable, $id, $cantidad);//substract from bodega.
 
             if($insertedCorrectly === 0){ //if correctly substracted from bodega then add to sala de venta.
               $cantidadActual = 0;                
               $cantidadActual = getTotalAvailable($con, "MercanciaPueblos", $id);
-              $getPrecioLugarBodega = getPrecioLugarBodega($con, $id);
+              $getPrecioLugarBodega = getPrecioLugarBodega($con, $id, $transTable);
               $precio = $getPrecioLugarBodega['precio'];
               $lugar = $getPrecioLugarBodega['lugar'];
               $checkInsertion = plusInventory($con, "MercanciaPueblos", $id, $cantidad, $precio, $lugar);

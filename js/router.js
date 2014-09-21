@@ -5,8 +5,6 @@
 window.App = {};
 
 
-
-
 var MessageRouter = Backbone.Router.extend({
     initialize:function(){
         App.currentView;

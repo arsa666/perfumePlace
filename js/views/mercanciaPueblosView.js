@@ -10,15 +10,18 @@ var mercanciaPueblosView = Backbone.View.extend({
 
     var id = el.find('input[name="id"]').val();
     var cantidad = el.find('input[name="cantidad"]').val();
+    var transferenciaLugar = el.find('input[name="trans-lugar"]:checked').val();
+	
 
-
-    var mercancia = new mercanciaAfueraModel({id:id, cantidad:cantidad});
+	var mercancia = new mercanciaAfueraModel({id:id, cantidad:cantidad, trans:transferenciaLugar});
     mercancia.url='api/mercanciaPueblosModel.php';
     mercancia.save({}, {
 
         success: function (model, response) {
             if(response === 0){
+		
                 alert("Se han transferido " + cantidad + " piezas del producto con codigo de barra:  " + model.get('id') +" y nombre "+ el.find("#productoName").html() + " y tamano "  + el.find("#productoSize").html());
+		resetForm(el);
             }else{
                 if(response === 1452){
                     var r = confirm('Este producto no existe en el inventario, desea agregarlo? ');
@@ -60,7 +63,7 @@ var mercanciaPueblosView = Backbone.View.extend({
     },
     render:function() {
         self = this;
-         $.get('js/templates/mercanciaAfueraViewTemplate.html', function (data) {
+         $.get('js/templates/mercanciaPueblosViewTemplate.html', function (data) {
             template = _.template($(data).html(), {});
             self.$el.html(template).hide().fadeIn("slow");
         }, 'html');
