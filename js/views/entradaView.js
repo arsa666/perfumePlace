@@ -14,11 +14,11 @@ var entradaView = Backbone.View.extend({
         formData.day = el.find("#entrada-dia").val();
 
         if(formData.year !== ""){
-            var result = '<table class="entrada-table"><tr><td>Codigo</td><td>Nombre</td><td>Cantidad</td><td>Precio</td><td>Lugar</td></tr>';
+            var result = '<table class="entrada-table"><tr class="entrada-header"><td>Codigo</td><td>Nombre</td><td>Cantidad</td><td>Precio</td><td>Lugar</td></tr>';
             $.get(this.options.url, formData, function(obj) {
                 obj = JSON.parse(obj);
                 _.each(obj, function (entrada) {
-                    result = result + "<tr><td>" + entrada.id + "</td><td>" + entrada.name + "</td><td>" + entrada.cantidad + "</td><td class='v-hidden'>" + entrada.precio + "</td><td>" + entrada.lugar+ '</td></tr>';
+                    result = result + "<tr><td>" + entrada.coid + "</td><td>" + entrada.name + "</td><td>" + entrada.cantidad + "</td><td class='v-hidden'>" + entrada.precio + "</td><td>" + entrada.lugar+ '</td></tr>';
                 });
                 el.find('#entrada-resultado').html(result);
             });

@@ -143,7 +143,7 @@ function getNameOfProduct($con, $id){
 
 //insert into register table of either bodega or fuera. 
 function plusRegisterInventory($con, $table, $id, $quantity,$precio, $lugar, $name) {
-    if($stmt = $con->prepare ("INSERT INTO $table (id, name, cantidad, precio, lugar) values (?, ?, ?, ?, ?)")){
+    if($stmt = $con->prepare ("INSERT INTO $table (coid, name, cantidad, precio, lugar) values (?, ?, ?, ?, ?)")){
                     if (!$stmt->bind_param("ssids", $id, $name, $quantity, $precio, $lugar)){
                         $response = mysqli_stmt_errno($stmt);
                          return $response;

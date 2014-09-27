@@ -236,3 +236,9 @@ color: red;
 .v-hidden:hover{
     color:black;
 }
+
+
+.entrada-header td{
+    font-weight:bold;
+    text-decoration: underline;
+}
