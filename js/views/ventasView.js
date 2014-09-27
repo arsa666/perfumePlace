@@ -1,21 +1,25 @@
 var ventasView = Backbone.View.extend({
-    events:{
-	'keyup #ventasCod': 'loadName',
-	'keyup #cedulaCliente': 'loadCliente',
-	'keyup #ventasPrecio': 'loadTotal',
-	'keyup #ventasCantidad': 'loadTotal',
-	'click input:radio[name=ventaPago]:checked': 'toggleOptions',
-	'click input:radio[name=ventaCategory]:checked': 'loadTotal',
-	'click input:submit': 'submitForm'
-    },
-    className: "content",
-    submitForm: function (e) {
+initialize: function (options) {
+	 this.options = options;
+},
+events:{
+'keyup #ventasCod': 'loadProducto',
+'keyup #cedulaCliente': 'loadCliente',
+'keyup #ventasPrecio': 'loadTotal',
+'keyup #ventasCantidad': 'loadTotal',
+'click input:radio[name=ventaPago]:checked': 'toggleOptions',
+'click input:radio[name=ventaCategory]:checked': 'loadTotal',
+'click #ventas-submit': 'submitForm'
+},
+className: "content",
+submitForm: function (e) {
 	e.preventDefault();
 	e.stopPropagation();
 	var el = this.$el;
 
 	var cod = el.find("#ventasCod").val();
 	var nombre = el.find("#productoName").text();
+	var type = el.find("#productoType").text();
 	var precio = el.find("#ventasPrecio").val();
 	var cantidad = el.find("#ventasCantidad").val();
 	var categoria = el.find("[name=ventaCategory]:checked").val();
@@ -48,12 +52,18 @@ var ventasView = Backbone.View.extend({
 	    return;
 	}
 
-	var ventas = new ventasModel({coid:cod, nombre:nombre, precioVenta:precio, cantidad:cantidad, tipoVenta:categoria, cedulaCliente: cedulaCliente, total:total, formaPago: ventaPago, otroAlmacen: otroAlmacen });
+	var ventas = new ventasModel({coid:cod, url: this.options.url, nombre:nombre, type1: type, precioVenta:precio, cantidad:cantidad, tipoVenta:categoria, cedulaCliente: cedulaCliente, total:total, formaPago: ventaPago, otroAlmacen: otroAlmacen });
 
 	ventas.save({}, {
 	    success: function (model, response) {
 	            if(response === 0){
-	            	el.find('form').trigger('reset');
+	            	resetForm(el);
+	            	el.find('#productoName').html('');
+	            	el.find('#productoSize').html('');
+	            	el.find('#ventasCliente').html('');
+	            	el.find('#numeroCliente').html('');
+
+
 	            	alert('Venta Registrada Correctamente');
 	            	//var ultimaVenta = new ultimaVentaView({model:model});
 	                //el.find("#ultimaVenta").html(ultimaVenta.render().el);
@@ -65,11 +75,11 @@ var ventasView = Backbone.View.extend({
 	            }
         	},
 	    error: function (model, response) {
-	        alert('Error al insertar venta, contacte administrador: '+response.responseText+ " con codigo de barra: " +model.coid);
+	        alert('Error al insertar venta: '+response.responseText+ " con codigo de barra: " +model.coid);
 	    }
 	});
-    },
-    toggleOptions: function () {
+},
+toggleOptions: function () {
 
 	var el  = this.$el;
 	var val = el.find("[name=ventaPago]:checked").val();
@@ -85,8 +95,8 @@ var ventasView = Backbone.View.extend({
 	    el.find(".credito").hide();
 			el.find("#nombreAlmacen").hide();
 	}
-    },
-    loadTotal: function () {
+},
+loadTotal: function () {
 	el = this.$el;
 	var precio = el.find("#ventasPrecio").val();
 	var cantidad = el.find("#ventasCantidad").val();
@@ -99,54 +109,44 @@ var ventasView = Backbone.View.extend({
 	}
 
 	ventasTotal.val(total);
-    },
-    loadCliente: function () {
+},
+loadCliente: function () {
 	self = this;
 	el = this.$el;
-
-	id = el.find("#cedulaCliente").val();
+	id = el.find("#cedulaCliente").val().toLowerCase();
 
 	if(id !== ""){
-	    model = App.clientesCredito.where({"cedula":String(id)});
-	    if (model !== undefined && model.length > 0){
-
-		el.find("#ventasCliente").html(model.nombre);
-		el.find("#numeroCliente").html(model.celular);
-		debugger;
-			}else{
-			    el.find("#ventasCliente").html("Este Cliente no existe");
-			}
+	    var model = new clienteCreditoModel({id:id});
+		fetchAndDisplayCliente(model, el, false);
 	}else{
-            el.find("#ventasCliente").html("");
+        el.find("#ventasCliente").html("");
 	    el.find("#numeroCliente").html("");
 	}
-    },
-    loadName: function (){
-	    self = this;
+},
+loadProducto: function (){
+    self = this;
 	el = this.$el;
-
 	id = el.find("#ventasCod").val();
-
 	if(id !== ""){
 	    var model = new productoModel({id: id});
 	    fetchAndDisplayProduct(model, el, false);
 	}else{
             el.find("#productoName").html("Ponga un codigo para buscar");
 	}
-    },
-    render:function() {
-	self = this;
-	var d = new Date();
-	var month = d.getMonth() + 1;
-	var day = d.getDate();
-	var year = d.getFullYear();
+},
+render:function() {
+self = this;
+var d = new Date();
+var month = d.getMonth() + 1;
+var day = d.getDate();
+var year = d.getFullYear();
 
-    	$.get('js/templates/ventasViewTemplate.html', function (data) {
-	    template = _.template($(data).html(), {month:month, day:day, year:year});
-            self.$el.html(template).hide().fadeIn("slow");
-        }, 'html');
+	$.get('js/templates/ventasViewTemplate.html', function (data) {
+    template = _.template($(data).html(), {month:month, day:day, year:year});
+        self.$el.html(template).hide().fadeIn("slow");
+    }, 'html');
 
 
-        return this;
-    }
+    return this;
+}
 });

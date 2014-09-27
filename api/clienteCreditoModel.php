@@ -29,6 +29,15 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PU
     $results = insertarClienteCredito($db, $cedula, $name, $celular);
     closeDB($db);
     echo $results;
+}elseif($_SERVER['REQUEST_METHOD'] === 'GET'){
+    $id = $_GET["id"];
+    //sanitationchecks
+    if(ctype_alnum($id) != false){
+        $db = openDB();
+        $results = getCliente($db, $id);    
+        closeDB($db);
+        echo $results;
+    }
 }
 
 ?>

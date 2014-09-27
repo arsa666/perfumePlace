@@ -7,6 +7,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
 	$id = $data->{'id'};
 	$name = $data->{'name'};
     $size = $data->{'size'};
+    $type = $data->{'type'};
+
     
 	//sanitation checks
     if(ctype_alnum($id) == false || $name == ''){
@@ -14,23 +16,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
       return;
     }
 
+
  	$db = openDB();
 
- 	$results = updateOrCreateProducto($db, $id, $name, $size);
+ 	$results = updateOrCreateProducto($db, $id, $name, $size, $type);
  	
  	closeDB($db);
 
  	echo $results;
 
 }elseif($_SERVER['REQUEST_METHOD'] === 'GET'){
+    $id = $_GET["id"];
+	 if(ctype_alnum($id) != false){
+        $db = openDB();
 
-	$db = openDB();
+     	$results = getProducto($db, $id);
+     	
+     	closeDB($db);
 
- 	$results = getProducto($db, $_GET["id"]);
- 	
- 	closeDB($db);
-
- 	echo $results;
+     	echo $results;
+    }
 }
 
 

@@ -1,8 +1,8 @@
-var mercanciaAfueraView = Backbone.View.extend({
-	events:{
+var mercanciaPueblosView = Backbone.View.extend({
+    events:{
         'click input:submit': 'insertMercanciaAfuera',
         'keyup #coid-afuera': 'displayProductoName',
-	},
+    },
     className: "content",
     insertMercanciaAfuera: function () {
     var self = this;
@@ -10,9 +10,11 @@ var mercanciaAfueraView = Backbone.View.extend({
 
     var id = el.find('input[name="id"]').val();
     var cantidad = el.find('input[name="cantidad"]').val();
+    var transferenciaLugar = el.find('input[name="trans-lugar"]:checked').val();
+	
 
-
-    var mercancia = new mercanciaAfueraModel({id:id, cantidad:cantidad});
+	var mercancia = new mercanciaAfueraModel({id:id, cantidad:cantidad, trans:transferenciaLugar});
+    mercancia.url='api/mercanciaPueblosModel.php';
     mercancia.save({}, {
 
         success: function (model, response) {
@@ -43,25 +45,25 @@ var mercanciaAfueraView = Backbone.View.extend({
 
         if(id !== ""){
             model = new productoModel({id: id});
-	    model.fetch({
-		success: function (m) {
-		    if(!_.isNull(m.get('name'))){//if exist.
-			el.find("#productoName").html(m.escape("name"));
-			el.find("#productoSize").html(m.escape("size"));
-		    } else {
-			el.find("#productoName").html("No existe este producto");
-			el.find("#productoSize").html("");
-		    }
-		}
-	    });
+        model.fetch({
+        success: function (m) {
+            if(!_.isNull(m.get('name'))){//if exist.
+            el.find("#productoName").html(m.escape("name"));
+            el.find("#productoSize").html(m.escape("size"));
+            } else {
+            el.find("#productoName").html("No existe este producto");
+            el.find("#productoSize").html("");
+            }
+        }
+        });
         }else{
             el.find("#productoName").html("");
-	    el.find("#productoSize").html("");
+        el.find("#productoSize").html("");
         }
     },
     render:function() {
-    	self = this;
-    	 $.get('js/templates/mercanciaAfueraViewTemplate.html', function (data) {
+        self = this;
+         $.get('js/templates/mercanciaPueblosViewTemplate.html', function (data) {
             template = _.template($(data).html(), {});
             self.$el.html(template).hide().fadeIn("slow");
         }, 'html');
