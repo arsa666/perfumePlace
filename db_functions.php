@@ -469,6 +469,24 @@ function getEntradaBodega($con, $year, $month, $day)
     return $myArray;
 }
 
+
+function getInventario($con, $table)
+{ 
+  $table = "Mercancia" . $table;
+  $sql="SELECT $table.id, $table.name, $table.cantidad, $table.precio, $table.lugar, Productos.type FROM $table INNER JOIN Productos WHERE $table.id=Productos.id AND Productos.type!='prueba';";
+  $result=mysqli_query($con, $sql);
+  $myArray = array();
+  $num_rows = mysql_num_rows($result);
+    
+  while($row = mysqli_fetch_array($result, MYSQL_ASSOC))
+    {
+      array_push($myArray, $row);
+    }
+  mysqli_free_result($result);
+  $myArray = json_encode($myArray);
+  return $myArray;
+}
+
 function getEntradaPueblos($con, $year, $month, $day)
 { 
   $start = $year."-".$month."-".$day." 00:00:00";

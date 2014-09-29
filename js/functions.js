@@ -113,8 +113,6 @@ function resetForm(el){
     el.find('input[type="text"]').val('');
 }
 
-
-
 function C(msg){
     console.log(msg);
 }
