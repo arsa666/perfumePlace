@@ -21,13 +21,10 @@ var MessageRouter = Backbone.Router.extend({
     },
     routes:{
         ""      : "menuDisplay",
-    "inventarioBodega": "inventarioBodega",
-    "inventarioAfuera": "inventarioAfuera",
-    "inventarioPueblos": "inventarioPueblos",
-
-
-
-
+      	"inventarioBodega": "inventarioBodega",
+      	"inventarioAfuera": "inventarioAfuera",
+      	"inventarioPueblos": "inventarioPueblos",
+        "reporteVentas": "reporteVentas"
     },
     //MENU
      menuDisplay: function () {
@@ -55,6 +52,11 @@ var MessageRouter = Backbone.Router.extend({
       var url = 'api/inventario.php?lugar=Pueblos';
       var inventarioPueblos = new inventarioTotalView({url: url});
       this._attachAndRenderView(inventarioPueblos);
+    },
+    reporteVentas: function(){
+      closeView(App.currentView);
+      var reporteVentasView = new reporteVentas({url: 'api/reporteVentasDiarias.php?lugar=Central', almacen: 'Central'});
+      this._attachAndRenderView(reporteVentasView);
     }
 
 });

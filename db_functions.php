@@ -104,7 +104,7 @@ function getNameOfProduct($con, $id){
       }
       if($stmt = $con->prepare("SELECT cantidad FROM MercanciaAfuera where id=?"))
       { 
-	$cantidad = 0;
+	       $cantidad = 0;
         $id = (string)$id;
         if (!$stmt->bind_param("s", $id)){
           echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
@@ -473,7 +473,35 @@ function getEntradaBodega($con, $year, $month, $day)
 function getInventario($con, $table)
 { 
   $table = "Mercancia" . $table;
-  $sql="SELECT $table.id, $table.name, $table.cantidad, $table.precio, $table.lugar, Productos.type FROM $table INNER JOIN Productos WHERE $table.id=Productos.id AND Productos.type!='prueba';";
+  $sql="SELECT $table.id, $table.name, $table.cantidad, $table.precio, $table.lugar, Productos.type FROM $table INNER JOIN Productos WHERE $table.id=Productos.id AND Productos.type!='prueba' ORDER BY $table.name;";
+  $result=mysqli_query($con, $sql);
+  $myArray = array();
+  $num_rows = mysql_num_rows($result);
+    
+  while($row = mysqli_fetch_array($result, MYSQL_ASSOC))
+    {
+      array_push($myArray, $row);
+    }
+  mysqli_free_result($result);
+  $myArray = json_encode($myArray);
+  return $myArray;
+}
+
+
+function getReporteVentasDiarias($con, $table)
+{ 
+  if (strcmp($lugar,"Pueblos") === 0){
+      $table = "VentasDiarias" . $table;
+  } else {
+      $table = "VentasDiarias";
+  }
+  $date = getdate();
+  $start = $date['year']."-".$date['mon']."-".$date['mday']." 00:00:00";
+  $end = $date['year']."-".$date['mon']."-".$date['mday']." 23:59:59";
+
+
+
+  $sql="SELECT $table.coid, $table.nombre, $table.precioVenta, $table.cantidad, $table.total,$table.formaPago FROM $table WHERE time BETWEEN '$start' AND '$end' ORDER BY `time` ASC;";
   $result=mysqli_query($con, $sql);
   $myArray = array();
   $num_rows = mysql_num_rows($result);

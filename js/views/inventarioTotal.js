@@ -47,6 +47,7 @@ var inventarioTotalView = Backbone.View.extend({
                 }
                 result = result + "<tr><td>" + entrada.id + "</td><td>" + entrada.name + "</td><td>" + entrada.cantidad + "</td><td>" + entrada.precio + "</td><td>" + entrada.type + "</td><td>" + entrada.lugar+ '</td></tr>';
             });
+            result += '</table>';
             var total = "Total Cantidad de Perfumes: <span>" + total_cantidad_perfume.toLocaleString() + "</span><BR/>Total Valor Perfumes: $<span>" + total_precio_perfume.toLocaleString() + "</span><BR/><HR>";
             total += "Total Cantidad de Sabanas: <span>" + total_cantidad_sabana.toLocaleString() + "</span><BR/>Total Valor Sabanas: $<span>" + total_precio_sabana.toLocaleString() + "</span><BR/><HR>";
             total += "Total Cantidad de Sobre Cama: <span>" + total_cantidad_sobrecama.toLocaleString() + "</span><BR/>Total Valor Sobre Cama: $<span>" + total_precio_sobrecama.toLocaleString() + "</span><BR/><HR>";
@@ -59,7 +60,7 @@ var inventarioTotalView = Backbone.View.extend({
             el.find('#entrada-resultado').html(result);
             el.find('#inventario-total').html(total);
         });
-      	},
+    },
     render:function() {
     	self = this;
         var title = 'Sala de Venta';
