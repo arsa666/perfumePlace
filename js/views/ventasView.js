@@ -1,6 +1,7 @@
 var ventasView = Backbone.View.extend({
 initialize: function (options) {
 	 this.options = options;
+    
 },
 events:{
 'keyup #ventasCod': 'loadProducto',
@@ -16,7 +17,7 @@ submitForm: function (e) {
 	e.preventDefault();
 	e.stopPropagation();
 	var el = this.$el;
-
+    
 	var cod = el.find("#ventasCod").val();
 	var nombre = el.find("#productoName").text();
 	var type = el.find("#productoType").text();

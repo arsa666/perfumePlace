@@ -7,6 +7,7 @@ window.App = {};
 
 var MessageRouter = Backbone.Router.extend({
     initialize:function(){
+	
         App.currentView;
         $('#main').empty();
         this.menuDisplay();
@@ -35,7 +36,7 @@ var MessageRouter = Backbone.Router.extend({
         "entradaAfuera": "entradaAfuera",
 	"cantidadProducto": "cantidadProducto",
     "mercanciaPueblos": "mercanciaPueblos",
-    "ventasPueblos": "displayVentasPueblos",
+
     "entradaPueblos": "entradaPueblos",
 
 
@@ -102,11 +103,6 @@ var MessageRouter = Backbone.Router.extend({
     displayVentas: function(){
         closeView(App.currentView);
         var ventas = new ventasView({url: 'api/ventasModel.php'});
-        this._attachAndRenderView(ventas);
-    },
-    displayVentasPueblos: function(){
-        closeView(App.currentView);
-        var ventas = new ventasView({url: 'api/ventasPueblosModel.php'});
         this._attachAndRenderView(ventas);
     },
     displayReferencias: function(){
