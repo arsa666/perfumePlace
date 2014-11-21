@@ -1,0 +1,101 @@
+
+<?php  
+ini_set('max_input_vars', 3000);
+include('../db_handler.php'); 
+include('../db_functions.php');
+
+$db = openDB();
+$table = "VentasDiarias";
+$results = sendEmailReporteVentasDiarias($db, $table);
+$centralEfectivo = 0;
+$centralTarjeta = 0;
+$centralCredito = 0;
+$centralOtroAlmacen = 0;
+$central = 0;
+$centralTotalEfectivoTarjeta = 0;
+$centralTotalTodo = 0;
+
+$date = date("Y-m-d");
+//var_dump($results);
+
+foreach ($results as $obj) {
+    if ($obj["formaPago"] == 'Efectivo') {
+        $centralEfectivo =  $obj["total"];
+        $centralTotalEfectivoTarjeta +=  $obj["total"];
+
+    }
+    if ($obj["formaPago"] == 'TarjetaCredito' || $obj["formaPago"] == 'TarjetaClave') {
+        $centralTarjeta =  $obj["total"];
+        $centralTotalEfectivoTarjeta +=  $obj["total"];
+
+    }
+    if ($obj["formaPago"] == 'Credito') {
+        $centralCredito =  $obj["total"];
+    }
+    if ($obj["formaPago"] == 'OtroAlmacen') {
+        $centralOtroAlmacen =  $obj["total"];
+    }
+    $centralTotalTodo +=  $obj["total"];
+}
+$table = "VentasDiariasPueblos";
+
+$results = sendEmailReporteVentasDiarias($db, $table);
+$pueblosEfectivo = 0;
+$pueblosTarjeta = 0;
+$pueblosCredito = 0;
+$pueblosOtroAlmacen = 0;
+$pueblos = 0;
+$pueblosTotalEfectivoTarjeta = 0;
+$pueblosTotalTodo = 0;
+
+foreach ($results as $obj) {
+    if ($obj["formaPago"] == 'Efectivo') {
+        $pueblosEfectivo =  round($obj["total"], 2);
+        $pueblosTotalEfectivoTarjeta +=  round($obj["total"], 2);
+    }
+    if ($obj["formaPago"] == 'TarjetaCredito' || $obj["formaPago"] == 'TarjetaClave') {
+        $pueblosTarjeta =  round($obj["total"], 2);
+        $pueblosTotalEfectivoTarjeta +=  round($obj["total"], 2);
+    }
+    if ($obj["formaPago"] == 'Credito') {
+        $pueblosCredito =  round($obj["total"], 2);
+    }
+    if ($obj["formaPago"] == 'OtroAlmacen') {
+        $pueblosOtroAlmacen =  round($obj["total"], 2);
+    }
+    $pueblosTotalTodo +=  round($obj["total"], 2);
+}
+closeDB($db);
+$headers = "MIME-Version: 1.0" . "\r\n";
+$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+$headers .= 'From: <admin@accurate.com>' . "\r\n" .
+            'Reply-To: admin@accurate.com' . "\r\n" .
+            'X-Mailer: PHP/' . phpversion();
+$headers .= 'Cc: myboss@example.com' . "\r\n";
+$para      = 'arsa666.k@gmail.com';
+$titulo    = 'Venta Diaria';
+$mensaje   = "
+            <h1>Ventas Central, $date</h1> <BR/>
+            <div><b>Efectivo: </b>$centralEfectivo</div>
+            <div><b>Tarjetas: </b>$centralTarjeta</div>
+            <div><b>Credito: </b>$centralCredito</div>
+            <div><b>OtroAlmacen: </b>$centralOtroAlmacen</div>
+            <div><b>Total Efectivo + Tarjeta: </b>$centralTotalEfectivoTarjeta</div>
+            <div><b>Total Todo: </b>$centralTotalTodo</div>
+
+            <HR>
+
+            <h1>Ventas Pueblos, $date</h1> <BR/>
+            <div><b>Efectivo: </b>$pueblosEfectivo</div>
+            <div><b>Tarjetas: </b>$pueblosTarjeta</div>
+            <div><b>Credito: </b>$pueblosCredito</div>
+            <div><b>OtroAlmacen: </b>$pueblosOtroAlmacen</div>
+            <div><b>Total Efectivo + Tarjeta: </b>$pueblosTotalEfectivoTarjeta</div>
+            <div><b>Total Todo: </b>$pueblosTotalTodo</div>
+";
+
+
+mail($para, $titulo, $mensaje, $headers);
+
+
+?>

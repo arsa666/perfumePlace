@@ -24,7 +24,9 @@ var MessageRouter = Backbone.Router.extend({
       	"inventarioBodega": "inventarioBodega",
       	"inventarioAfuera": "inventarioAfuera",
       	"inventarioPueblos": "inventarioPueblos",
-        "reporteVentas": "reporteVentas"
+        "reporteVentas": "reporteVentas",
+        "reporteVentasPueblos": "reporteVentasPueblos",
+        "modificarCantidad" : "modificarCantidad"
     },
     //MENU
      menuDisplay: function () {
@@ -55,9 +57,20 @@ var MessageRouter = Backbone.Router.extend({
     },
     reporteVentas: function(){
       closeView(App.currentView);
-      var reporteVentasView = new reporteVentas({url: 'api/reporteVentasDiarias.php?lugar=Central', almacen: 'Central'});
+      var reporteVentasView = new reporteVentas({url: 'api/reporteVentasDiarias.php', almacen: 'Central'});
       this._attachAndRenderView(reporteVentasView);
+    },
+    reporteVentasPueblos: function(){
+      closeView(App.currentView);
+      var reporteVentasView = new reporteVentas({url: 'api/reporteVentasDiarias.php', almacen: 'Pueblos'});
+      this._attachAndRenderView(reporteVentasView);
+    },
+    modificarCantidad: function(){
+      closeView(App.currentView);
+      var modificarCantidad = new modificarCantidadView({});
+      this._attachAndRenderView(modificarCantidad);
     }
+
 
 });
 

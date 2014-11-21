@@ -5,12 +5,15 @@ echo '
 <head>
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="jquery-ui.css">
 	<!-- CSS -->
 	<!-- JavaScript -->
     <script src="js/libs/jquery-2.0.3.min.js"></script>
     <script src="js/libs/underscore-min.js"></script>
     <script src="js/libs/backbone-min.js"></script> 
-    <script src="js/functions.js"></script> ';
+    <script src="js/functions.js"></script> 
+    <script src="js/libs/Chart.js"></script>
+    <script src="js/libs/jquery-ui.js"></script>';
 
     if ($handle = opendir('js/models')) {
     while (false !== ($entry = readdir($handle))) {
@@ -45,6 +48,6 @@ echo '
     <script src="js/router.js"></script>
     <!-- JavaScript -->
 
-      <title>Accurate</title>
+      <title>Admin</title>
     </head>';    
 ?>

@@ -1,14 +1,67 @@
 <script type='text/template'>
 
-<div class="form"><h1>Reporte de Ventas de <%=  almacen%></h1>
+<div class="form" style='font-size:12px;'><h1>Reporte de Ventas de <%=  almacen%></h1>
 
     <h3>Ventas Diarias</h3>
+    <div>
+    <label for="from">Eliga un dia</label>
+    <input type="text" id="calendar-tabla">
+        <input type="submit" id="reporte-tabla-submit" value='Buscar'/><BR/>
+    </div>
     <div id='tabla-diaria'></div>
-    <div class=''>Total Venta (este total no refleja las ventas  de credito o las ventas a otro almacen): </div>
-    <div id='tabla-stats-diario'></div>
+    <div class='p-10'>Total Venta: </div>
+    
+    <div><b>Cortina Total:</b><span id='tabla-stats-cortina'>0</span>, <b>Total Piezas: </b> <span id='cortina-total'>0</span></div>
+    <div><b>Perfume Total:</b><span id='tabla-stats-perfume'>0</span>, <b>Total Piezas: </b> <span id='perfume-total'>0</span></div>    
+    <div><b>Sabana Total:</b><span id='tabla-stats-sabana'>0</span>, <b>Total Piezas: </b> <span id='sabana-total'>0</span></div>
+    <div><b>Sobrecama Total:</b><span id='tabla-stats-sobrecama'>0</span>, <b>Total Piezas: </b> <span id='sobrecama-total'>0</span></div>
+    <div><b>Toalla Total:</b><span id='tabla-stats-toalla'>0</span>, <b>Total Piezas: </b> <span id='toalla-total'>0</span></div>
+    <div><b>Otros Total:</b><span id='tabla-stats-otro'>0</span>, <b>Total Piezas: </b> <span id='otro-total'>0</span></div>
     <HR>
+    <div><b>Total (Efectivo + Tarjetas + Credito + Otro): </b><span id='tabla-stats-total-todo'>0</span></div>
+
+    <div><b>Efectivo: </b><span id='tabla-stats-efectivo'>0</span></div>
+
+    <div><b>Tarjetas: </b><span id='tabla-stats-tarjeta'>0</span></div>
+
+    <div><b>Credito (Paisano): </b><span id='tabla-stats-credito'>0</span></div>
+    <div><b>Otro Almacen (Salim Bhai, Hanif, etc.):</b> <span id='tabla-stats-otro-almacen'>0</span></div>
+
+    <div><b>Total Efectivo + Tarjetas: </b><span id='tabla-stats-diario'>0</span></div>
+    <HR>
+    <h3>Ventas en un Tiempo de Rango</h3>
+     <label for="from">Desde</label>
+    <input type="text" id="from" name="from">
+    <label for="to">Hasta</label>
+    <input type="text" id="to" name="to">
+    <input type="submit" id="reporte-graph-submit" value='Buscar'/><BR/><Br/>
+    <BR/>
+    <div><b>Total (Efectivo + Tarjetas + Credito + Otro): </b><span class='timeRange-reset' id='timeRange-stats-total-todo'>0</span></div>
+
+    <div><b>Efectivo: </b><span class='timeRange-reset' id='timeRange-stats-efectivo'>0</span></div>
+
+    <div><b>Tarjetas: </b><span class='timeRange-reset' id='timeRange-stats-tarjeta'>0</span></div>
+
+    <div><b>Credito (Paisano): </b><span class='timeRange-reset' id='timeRange-stats-credito'>0</span></div>
+    <div><b>Otro Almacen (Salim Bhai, Hanif, etc.):</b> <span class='timeRange-reset' id='timeRange-stats-otro-almacen'>0</span></div>
+
+    <div><b>Total Efectivo + Tarjetas: </b><span class='timeRange-reset' id='timeRange-stats-efectivoTarjeta'>0</span></div>
+    <BR/>
+  
+    <div id='no-graph'></div>
+
+    <canvas id="myChart" width="1000" height="400"></canvas>
+    <HR>
+    <label>Reporte de un solo producto: </label>
+    <input type="text" id="producto-ind">
+    <input type="submit" id="reporte-producto-submit" value='Buscar'/><BR/>
+    <div id='tabla-producto'></div>
+    <h3>Venta de producto por mes:</h3>
+    <div id='producto-x-mes'></div>
 
 
+
+    
 </div>
 
 

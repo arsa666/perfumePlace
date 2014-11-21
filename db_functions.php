@@ -473,7 +473,8 @@ function getEntradaBodega($con, $year, $month, $day)
 function getInventario($con, $table)
 { 
   $table = "Mercancia" . $table;
-  $sql="SELECT $table.id, $table.name, $table.cantidad, $table.precio, $table.lugar, Productos.type FROM $table INNER JOIN Productos WHERE $table.id=Productos.id AND Productos.type!='prueba' ORDER BY $table.name;";
+  $sql="SELECT $table.id, $table.name, $table.cantidad, $table.precio, $table.lugar, Productos.type FROM $table INNER JOIN Productos WHERE $table.id=Productos.id AND Productos.type!='prueba' ORDER BY Productos.type, $table.name;";
+  
   $result=mysqli_query($con, $sql);
   $myArray = array();
   $num_rows = mysql_num_rows($result);
@@ -487,21 +488,56 @@ function getInventario($con, $table)
   return $myArray;
 }
 
+function getReporteProducto($con, $table, $coid)
+{   
 
-function getReporteVentasDiarias($con, $table)
+  $sql="SELECT $table.coid, $table.nombre,  DATE($table.time) as time, $table.precioVenta, $table.cantidad, $table.total, $table.formaPago, $table.cedulaCliente, $table.tipoVenta FROM $table WHERE coid=$coid  ORDER BY DATE(time) DESC;";
+  $result=mysqli_query($con, $sql);
+  $myArray = array();
+  $num_rows = mysql_num_rows($result);
+    
+  while($row = mysqli_fetch_array($result, MYSQL_ASSOC))
+    {
+      array_push($myArray, $row);
+    }
+  mysqli_free_result($result);
+  $myArray = json_encode($myArray);
+  return $myArray;
+  
+}
+
+
+function sendEmailReporteVentasDiarias($con, $table)
 { 
-  if (strcmp($lugar,"Pueblos") === 0){
-      $table = "VentasDiarias" . $table;
-  } else {
-      $table = "VentasDiarias";
-  }
-  $date = getdate();
-  $start = $date['year']."-".$date['mon']."-".$date['mday']." 00:00:00";
-  $end = $date['year']."-".$date['mon']."-".$date['mday']." 23:59:59";
+  
+  $start = date("Y-m-d")." 00:00:00";
+  $end = date("Y-m-d")." 23:59:59";
+
+  $sql="SELECT TRUNCATE(SUM($table.total), 3) as total, $table.formaPago FROM $table WHERE time BETWEEN '$start' AND '$end' GROUP BY $table.formaPago;";
+
+  $result=mysqli_query($con, $sql);
+  $myArray = array();
+  $num_rows = mysql_num_rows($result);
+    
+  while($row = mysqli_fetch_array($result, MYSQL_ASSOC))
+    {
+      array_push($myArray, $row);
+    }
+  mysqli_free_result($result);
+  //$myArray = json_encode($myArray);
+  return $myArray;
+}
 
 
 
-  $sql="SELECT $table.coid, $table.nombre, $table.precioVenta, $table.cantidad, $table.total,$table.formaPago FROM $table WHERE time BETWEEN '$start' AND '$end' ORDER BY `time` ASC;";
+function getReporteVentasDiarias($con, $table, $year, $month, $day)
+{ 
+  
+  $start = $year."-".$month."-".$day." 00:00:00";
+  $end = $year."-".$month."-".$day." 23:59:59";
+
+  $sql="SELECT $table.coid, $table.nombre, $table.precioVenta, $table.cantidad, $table.total,$table.formaPago, $table.cedulaCliente, Productos.type, $table.tipoVenta FROM $table INNER JOIN Productos WHERE $table.coid=Productos.id AND $table.time BETWEEN '$start' AND '$end' ORDER BY Productos.type, $table.time ASC;";
+  
   $result=mysqli_query($con, $sql);
   $myArray = array();
   $num_rows = mysql_num_rows($result);
@@ -514,6 +550,48 @@ function getReporteVentasDiarias($con, $table)
   $myArray = json_encode($myArray);
   return $myArray;
 }
+
+function getReporteVentasGraph($con, $table, $year1, $month1, $day1, $year2, $month2, $day2)
+{ 
+
+  $start = $year1."-".$month1."-".$day1. " 00:00:00";
+  $end = $year2."-".$month2."-".$day2." 23:59:59";
+
+  $sql="SELECT TRUNCATE(SUM($table.total), 3) as total, DATE($table.time) as time FROM $table WHERE time BETWEEN '$start' AND '$end' AND $table.formaPago != 'Credito' GROUP BY DATE(time);";
+  $result=mysqli_query($con, $sql);
+  $myArray = array();
+  $num_rows = mysql_num_rows($result);
+    
+  while($row = mysqli_fetch_array($result, MYSQL_ASSOC))
+    {
+      array_push($myArray, $row);
+    }
+  mysqli_free_result($result);
+  $myArray = json_encode($myArray);
+  return $myArray;
+}
+
+function getReporteVentasTimeRange($con, $table, $year1, $month1, $day1, $year2, $month2, $day2)
+{ 
+
+  $start = $year1."-".$month1."-".$day1. " 00:00:00";
+  $end = $year2."-".$month2."-".$day2." 23:59:59";
+
+  $sql="SELECT TRUNCATE(SUM($table.total), 3) as total, $table.formaPago FROM $table WHERE time BETWEEN '$start' AND '$end' GROUP BY $table.formaPago;";
+  $result=mysqli_query($con, $sql);
+  $myArray = array();
+  $num_rows = mysql_num_rows($result);
+    
+  while($row = mysqli_fetch_array($result, MYSQL_ASSOC))
+    {
+      array_push($myArray, $row);
+    }
+  mysqli_free_result($result);
+  $myArray = json_encode($myArray);
+  return $myArray;
+}
+
+
 
 function getEntradaPueblos($con, $year, $month, $day)
 { 

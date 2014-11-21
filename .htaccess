@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Test"
+AuthUserFile /home/.htpasswd
+Require user arsa
